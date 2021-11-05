@@ -1,2 +1,2 @@
 # mintagram
-Diseño de red social para la comunidad de MisionTic 2022
+Red social para la comunidad de MisionTic 2022 donde pueden compartir sus logros y dificultades
