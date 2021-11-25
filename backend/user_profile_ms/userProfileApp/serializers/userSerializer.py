@@ -8,7 +8,8 @@ class UserSerializer(serializers.ModelSerializer):
             'username',
             'email',
             'password',
-            'profile_image'
+            'profile_image',
+            'ocupation'
         ]
     
     def to_representation(self, obj):

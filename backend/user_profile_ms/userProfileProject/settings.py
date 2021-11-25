@@ -107,6 +107,14 @@ DATABASES = {
         'PASSWORD' : '99388b8958e71c301db9d50f63a2da38c3072de50ed7f48e28ef777d8116a4ac',
         'USER'     : 'ubykytffrpynhz'
     }
+    # 'default': {
+    #     'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
+    #     'NAME'     : 'mintagram_user_profile_ms',
+    #     'HOST'     : 'localhost',
+    #     'PORT'     : '5432',
+    #     'PASSWORD' : 'postgres',
+    #     'USER'     : 'postgres'
+    # }
 }
 
 
