@@ -2,16 +2,20 @@ package com.Mintagram.posts_ms.models;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
+
 public class Like {
     @Id
     private String id;
     private String usernameOrigin;
     private String postIdDestiny;
+    private Date likedate;
 
-    public Like(String id, String usernameOrigin, String postIdDestiny) {
+    public Like(String id, String usernameOrigin, String postIdDestiny, Date likedate) {
         this.id = id;
         this.usernameOrigin = usernameOrigin;
         this.postIdDestiny = postIdDestiny;
+        this.likedate = likedate;
     }
 
     public String getId() {
@@ -36,5 +40,13 @@ public class Like {
 
     public void setPostIdDestiny(String postIdDestiny) {
         this.postIdDestiny = postIdDestiny;
+    }
+
+    public Date getLikedate() {
+        return likedate;
+    }
+
+    public void setLikedate(Date likedate) {
+        this.likedate = likedate;
     }
 }
