@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshVie
 from authApp import views
 
 urlpatterns = [
-    path('login/', TokenObtainPairView.as_view()),
+    #path('login/', TokenObtainPairView.as_view()),
 
     path('message/create/', views.MessageCreateView.as_view()),
     path('allmessages/<int:user>/', views.AllMessagesView.as_view()),
