@@ -25,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(kmy2qe2ye(vdk8i6f*6d=@=4&=1sl+a+r85x%qcbu24_*(&g-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG                  = False
+ALLOWED_HOSTS          = ['localhost']
 
 # Application definition
 
@@ -48,6 +48,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     #para que no vuelva a generar el mismo token
+    # se cambia a false, proque como en microservicio mucho flujo de info
+    # no sirve estar creando nuevos porque luego se van a acabar los tokens
     'BLACKLIST_AFTER_ROTATION': False, 
     #guardar info del ultimo login
     'UPDATE_LAST_LOGIN': False,
