@@ -16,8 +16,14 @@ const messageResolver = {
                     return null
                 }
             },
-            messageById: async(_, {usrMsgInput}, {dataSources}) => {
-                return await dataSources.messageAPI.getUserMessage(usrMsgInput.userId, usrMsgInput.messageId)
+            messageById: async(_, {usrMsgInput}, {dataSources, userIdToken}) => {
+                idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
+                if (usrMsgInput.userId == idUserToken) {
+                    return await dataSources.messageAPI.getUserMessage(usrMsgInput.userId, usrMsgInput.messageId)
+                } else {
+                    return null
+                }
+                
             },
             
     },
