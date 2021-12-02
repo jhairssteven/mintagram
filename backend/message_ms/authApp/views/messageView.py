@@ -59,11 +59,11 @@ class MessageCreateView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         # si todo bien, invoca la funcion save, o sea guardar en la DB
         serializer.save()
-        return Response("Mensaje creado",status=status.HTTP_201_CREATED)
+        return Response("Mensaje creado", status=status.HTTP_201_CREATED)
     
 # borrar un mensaje
 class MessageDeleteView(generics.DestroyAPIView):
-    queryset           = Message.objects.all()
+    queryset         = Message.objects.all()
     serializer_class = MessageSerializer
 
     def delete_queryset(self):
