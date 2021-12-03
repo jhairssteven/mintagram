@@ -12,7 +12,10 @@ class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     
     # change default field to search on get request below
-    lookup_field = "id_user" 
+    def get(self, request, *arg, **kwargs):
+        return super().get(self, request, *arg, **kwargs)
+
+    """lookup_field = "id_user" 
     
     permission_classes = (IsAuthenticated,)
 
@@ -25,4 +28,4 @@ class UserDetailView(generics.RetrieveAPIView):
             stringResponse = {'detail': 'Only registered users can see this info'}
             return Response(stringResponse, status=status.HTTP_401_UNAUTHORIZED)
        
-        return super().get(request, *arg, **kwargs)
+        return super().get(request, *arg, **kwargs)"""
