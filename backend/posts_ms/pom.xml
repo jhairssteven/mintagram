@@ -14,7 +14,7 @@
 	<name>posts_ms</name>
 	<description>post microservice, using NOSQL database and spring-boot</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

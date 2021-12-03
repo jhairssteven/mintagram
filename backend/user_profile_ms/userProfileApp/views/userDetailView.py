@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from userProfileApp.models.users import Users
 from userProfileApp.serializers.userSerializer import UserSerializer
 
+        
 class UserDetailView(generics.RetrieveAPIView):
     queryset = Users.objects.all()
     serializer_class = UserSerializer
