@@ -4,18 +4,21 @@ const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 
 const MessageAPI = require('./dataSources/message_api');
-const PostsAPI = require('./dataSources/posts_api');
-const UserProfileAPI = require('./dataSources/user_profile_api');
+// const PostsAPI = require('./dataSources/posts_api');
+// const UserProfileAPI = require('./dataSources/user_profile_api');
 
 const authentication = require('./utils/authentication');
+// dataSources: () => ({
+//     messageAPI: new MessageAPI(),
+//     postsAPI: new PostsAPI(),
+//     userProfileAPI: new UserProfileAPI(),
+// }),
 const server = new ApolloServer({
     context: authentication,
     typeDefs,
     resolvers,
     dataSources: () => ({
         messageAPI: new MessageAPI(),
-        postsAPI: new PostsAPI(),
-        userProfileAPI: new UserProfileAPI(),
     }),
     introspection: true,
     playground: true
