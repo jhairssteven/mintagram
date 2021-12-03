@@ -19,6 +19,11 @@ public class PostController {
         this.postRepository = postRepository;
     }
 
+    /*@GetMapping("/")
+    String messageRoot(){
+        return "Conexion exitosa a PostMS";
+    }*/
+
     @GetMapping("/")
     String messagePostRoot(){
         return "Por favor complete la url con el endpoint que corresponda";

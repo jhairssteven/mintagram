@@ -2,23 +2,19 @@ const { ApolloServer } = require('apollo-server');
 
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
-
 const MessageAPI = require('./dataSources/message_api');
-// const PostsAPI = require('./dataSources/posts_api');
-// const UserProfileAPI = require('./dataSources/user_profile_api');
-
+//const PostsAPI = require('./dataSources/posts_api');
+const User_Profile_API = require('./dataSources/user_profile_api');
 const authentication = require('./utils/authentication');
-// dataSources: () => ({
-//     messageAPI: new MessageAPI(),
-//     postsAPI: new PostsAPI(),
-//     userProfileAPI: new UserProfileAPI(),
-// }),
+
 const server = new ApolloServer({
     context: authentication,
     typeDefs,
     resolvers,
     dataSources: () => ({
         messageAPI: new MessageAPI(),
+        //postsAPI: new PostsAPI(),
+        user_profile_API: new User_Profile_API(),
     }),
     introspection: true,
     playground: true
@@ -27,3 +23,4 @@ const server = new ApolloServer({
 server.listen(process.env.PORT || 4000).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
 });
+
