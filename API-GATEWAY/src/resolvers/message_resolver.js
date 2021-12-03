@@ -1,25 +1,27 @@
 const messageResolver = {
     Query: {
-            allMessagesByUserId: async(_,{userId}, {dataSources, userIdToken}) => {
-                idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
-                if (userId == idUserToken) {
-                    return await dataSources.messageAPI.getAllMessages(userId)
+            allMessagesByUserId: async(_,{origin_user}, {dataSources, userIdToken}) => {
+                idUserToken = (await dataSources.user_profile_API.getUser(userIdToken)).id_user
+                if (origin_user == idUserToken) {
+                    return await dataSources.messageAPI.getAllMessages(origin_user)
                 } else {
                     return null
                 }
             },
-            allMessagesByLocutors: async(_, {locutorsIds}, {dataSources, userIdToken}) => {
-                idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
-                if(idUserToken == locutorsIds.origin_userId) {
-                    return await dataSources.messageAPI.getConversation(locutorsIds.origin_userId, locutorsIds.destiny_userId)
+
+            allMessagesByLocutors: async(_, {userOriginId, userDestinyId}, {dataSources, userIdToken}) => {
+                //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
+                if(userOriginId == userIdToken) {
+                    return await dataSources.messageAPI.getConversation(userOriginId, userDestinyId)
                 } else {
                     return null
                 }
             },
-            messageById: async(_, {usrMsgInput}, {dataSources, userIdToken}) => {
-                idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
-                if (usrMsgInput.userId == idUserToken) {
-                    return await dataSources.messageAPI.getUserMessage(usrMsgInput.userId, usrMsgInput.messageId)
+
+            messageById: async(_, {userOriginId, messageId}, {dataSources, userIdToken}) => {
+                //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
+                if (userOriginId == userIdToken) {
+                    return await dataSources.messageAPI.getUserMessage(userOriginId, messageId)
                 } else {
                     return null
                 }
@@ -31,12 +33,18 @@ const messageResolver = {
     Mutation: {
         // createMessage(message: Message!)
         // deleteMessage(data: DeleteMessageInput!): String
-        createMessage: async(_, {message}, {dataSources}) => {
-            await dataSources.messageAPI.createMessage(message)
+        createMessage: async(_, {message}, {dataSources, userIdToken}) => {
+            if (userIdToken != null)
+              return await dataSources.messageAPI.createMessage(message)
+            else
+               return null
         },
         
-        deleteMessage: async(_, {origin_user, message_id}, {dataSources}) => {
-            await dataSources.messageAPI.deleteMessage(origin_user, message_id)
+        deleteMessage: async(_, {userOriginId, messageId}, {dataSources, userIdToken}) => {
+            if (userOriginId == userIdToken)
+              return await dataSources.messageAPI.deleteMessage(userOriginId, messageId)
+            else
+              return null
         }
     }
 };

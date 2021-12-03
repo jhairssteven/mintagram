@@ -10,19 +10,19 @@ class MessageAPI extends RESTDataSource {
 
     async createMessage(message) {
         message = new Object(JSON.parse(JSON.stringify(message)));
-        return await this.post(`/message/create/`, message);
+        return await this.post('/message/create/', message);
     }
 
-    async getAllMessages(userId) {
-        return await this.get(`/allmessages/${userId}/`);
+    async getAllMessages(origin_user) {
+        return await this.get(`/allmessages/${origin_user}/`);
     }
 
-    async getConversation(originUserId, destinationUserId) {
-        return await this.post(`/messages/filter/${originUserId}/${destinationUserId}/`);
+    async getConversation(userOriginId, userDestinyId) {
+        return await this.get(`/messages/filter/${userOriginId}/${userDestinyId}/`);
     }
 
     async getUserMessage (userId, messageId) {
-        return await this.post(`/message/${userId}/${messageId}/`);
+        return await this.get(`/message/${userId}/${messageId}/`);
     }
 
     async deleteMessage (userId, messageId) {
@@ -30,4 +30,9 @@ class MessageAPI extends RESTDataSource {
     }
 }
 
+/*
+SIRVE
+async getConversation(AllMessagesByLocutorsInput) {
+        return await this.get(`/messages/filter/${AllMessagesByLocutorsInput.origin_userId}/${AllMessagesByLocutorsInput.destiny_userId}/`);
+    } */
 module.exports = MessageAPI;
