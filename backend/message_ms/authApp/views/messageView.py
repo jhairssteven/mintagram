@@ -15,7 +15,7 @@ class AllMessagesView(generics.ListCreateAPIView):
     serializer_class   = MessageSerializer
 
     def get_queryset(self):
-        queryset = Message.objects.filter(origin_user =self.kwargs['user'])
+        queryset = Message.objects.filter(origin_user =int(self.kwargs['userId']))
         #if len(queryset)==0:
         #    stringResponse = {"no hay mensajes enviados por:" + str(self.kwargs['user'])}
         #    return Response(stringResponse,status=status.HTTP_204_NO_CONTENT)
@@ -43,7 +43,7 @@ class MessageDetailView(generics.RetrieveAPIView):
     #     return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = Message.objects.filter(origin_user =self.kwargs['user'],
+        queryset = Message.objects.filter(origin_user =int(self.kwargs['user']),
         id=self.kwargs['pk'])
         return queryset
 
@@ -59,15 +59,15 @@ class MessageCreateView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         # si todo bien, invoca la funcion save, o sea guardar en la DB
         serializer.save()
-        return Response("Mensaje creado",status=status.HTTP_201_CREATED)
+        return Response("Mensaje creado", status=status.HTTP_201_CREATED)
     
 # borrar un mensaje
 class MessageDeleteView(generics.DestroyAPIView):
-    queryset           = Message.objects.all()
+    queryset         = Message.objects.all()
     serializer_class = MessageSerializer
 
     def delete_queryset(self):
-        queryset = Message.objects.filter(origin_user=self.kwargs['user'],
+        queryset = Message.objects.filter(origin_user=int(self.kwargs['user']),
         id=self.kwargs['pk'])
         return Response(status=status.HTTP_204_NO_CONTENT)
     

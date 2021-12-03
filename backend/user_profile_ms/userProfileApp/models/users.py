@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from django.contrib.auth.hashers import make_password
 
 class UserManager(BaseUserManager):
-    def create_user(self, name, email, password):
-        if name is None:
+    def create_user(self, username, email, password):
+        if username is None:
             raise TypeError('You must enter an user name, so that people can find you easily')
         if email is None:
             raise TypeError('You must enter an email')
@@ -12,14 +12,14 @@ class UserManager(BaseUserManager):
             raise TypeError('You must enter a password, be secured')
 
         # email normalization to prevent multiple sign up
-        user = self.model(name = name, email=self.normalize_email(email))
+        user = self.model(username = username, email=self.normalize_email(email))
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, name, email, password):
-        user = self.create_user(name, email, password)
+    def create_superuser(self, username, email, password):
+        user = self.create_user(username, email, password)
         user.is_superuser = True
         user.is_staff = True
         user.is_active = True

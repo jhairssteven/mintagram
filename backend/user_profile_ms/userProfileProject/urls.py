@@ -25,6 +25,6 @@ urlpatterns = [
     path('u/refresh/',          TokenRefreshView.as_view()),    # user token refresh
     path('u/signup/',            views.UserCreateView.as_view()), # user signup
     path('u/e/<email>/',        views.EmailExistsView.as_view()),  # check email exists
-    path('u/id/<int:id_user>/',  views.UserDetailView.as_view()), # get user detail
+    path('u/id/<int:pk>/',  views.UserDetailView.as_view()), # get user detail- el endpoint tiene que llamrse <int:pk>
     path('verifyToken/', views.VerifyTokenView.as_view())
 ]
