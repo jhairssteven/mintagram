@@ -1,10 +1,17 @@
 package com.Mintagram.posts_ms.controllers;
 
 import com.Mintagram.posts_ms.exceptions.PostNotFoundException;
+
 import com.Mintagram.posts_ms.models.Post;
 import com.Mintagram.posts_ms.repositories.PostRepository;
+//import com.Mintagram.posts_ms.repositories.ImageRepository;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+
 
 import java.util.Date;
 import java.util.List;
@@ -14,9 +21,17 @@ import java.util.List;
 public class PostController {
     @Autowired
     private final PostRepository postRepository;
+    //private final ImageRepository imageRepository;
 
     public PostController(PostRepository postRepository) {
         this.postRepository = postRepository;
+        //this.imageRepository = imageRepository;
+    }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        /*que ignore username cuando se haga la validacion*/
+        binder.setDisallowedFields(new String[]{"username"});
     }
 
     /*@GetMapping("/")
@@ -52,20 +67,41 @@ public class PostController {
         return postRepository.findByCategoria(categoria);
     }
 
+    /*@GetMapping("/byImageId/{image_id}")
+    Post findPostsByImageId(@PathVariable String image_id){
+        return postRepository.findByImageId(image_id);
+    }*/
+
+    @GetMapping("/byCommentId/{comment_id}")
+    Post findPostsByCommentId(@PathVariable String comment_id){
+        return postRepository.findByCommentsId(comment_id);
+    }
+
+    @GetMapping("/byLikeId/{like_id}")
+    Post findPostsByLikeId(@PathVariable String like_id){
+        return postRepository.findByLikeId(like_id);
+    }
+
     @PostMapping("/create")
     Post createPost(@RequestBody Post post){
         post.setPostdate(new Date());
+        if(post.getUsername()==null || post.getUsername()=="")
+            throw new PostNotFoundException("el campo username es obligatorio");
+        if(post.getCategoria()==null || post.getCategoria()=="")
+            throw new PostNotFoundException("el campo Categoria es obligatorio");
         return postRepository.save(post);
     }
 
     @PutMapping("/update")
-    Post updatePostByComment(@RequestBody Post post){
+    String updatePostByComment(@RequestBody Post post){
         Post post_update=postRepository.findById(post.getId()).orElse(null);
         if (post_update==null)
             throw new PostNotFoundException("No hay posts con id: " + post.getId());
         post_update.setDescription(post.getDescription());
         post_update.setCategoria(post.getCategoria());
-        return postRepository.save(post_update);
+        post_update.setPostdate(new Date());
+        postRepository.save(post_update);
+        return "Actualizacion exitosa";
 
     }
 

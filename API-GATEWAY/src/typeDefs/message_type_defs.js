@@ -15,13 +15,13 @@ const messageTypeDefs = gql `
         text: String!
     }
 
-    type Query {
+    extend type Query {
         allMessagesByUserId(origin_user: Int!): [Message]
         allMessagesByLocutors(userOriginId: Int!, userDestinyId: Int!): [Message]
         messageById(userOriginId: Int!, messageId: Int!): Message
     }
 
-    type Mutation {
+    extend type Mutation {
         createMessage(message: messageInput!): String
         deleteMessage(userOriginId: Int!, messageId: Int!): String
     }
