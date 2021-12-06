@@ -5,25 +5,26 @@ import org.springframework.data.annotation.Id;
 import java.util.Date;
 
 public class Like {
-    //@Id
-    //private String id;
+    @Id
+    private String id;
     private String usernameOrigin;
     private String postIdDestiny;
     private Date likedate;
 
-    public Like( String usernameOrigin,String postIdDestiny, Date likedate) {
+    public Like(String id, String usernameOrigin, String postIdDestiny, Date likedate) {
+        this.id = id;
         this.usernameOrigin = usernameOrigin;
         this.postIdDestiny = postIdDestiny;
         this.likedate = likedate;
     }
 
-    /*public String getId() {
+    public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }*/
+    }
 
     public String getUsernameOrigin() {
         return usernameOrigin;

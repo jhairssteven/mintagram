@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PostsMsApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(PostsMsApplication.class, args);
 	}
 

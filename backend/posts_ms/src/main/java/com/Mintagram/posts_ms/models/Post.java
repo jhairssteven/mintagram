@@ -1,26 +1,26 @@
 package com.Mintagram.posts_ms.models;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.awt.*;
+
 import java.util.Date;
 import java.util.List;
 
-/*@Document*/
+@ComponentScan("com.Mintagram.posts_ms.models")
 public class Post {
 
     @Id
     private String id;
     private String username;
-    private List<String> image;
+    private String image;
     private String description;
     private List<Like> like;
     private Date postdate;
     private String categoria;
     private List<Comment> comments;
 
-    public Post(String id, String username, List<String> image, String description, List<Like> like, Date postdate, String categoria, List<Comment> comments) {
+    public Post(String id, String username, String image, String description, List<Like> like, Date postdate, String categoria, List<Comment> comments) {
         this.id = id;
         this.username = username;
         this.image = image;
@@ -55,11 +55,11 @@ public class Post {
         this.username = username;
     }
 
-    public List<String> getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(List<String> image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
