@@ -1,82 +1,109 @@
 <template>
-  <div class="post">
-      <div class="container_post">
-          <section id="publicaciones">
-              <!-- Articulos -->
-              <article class="post">
-  
-                  <a href="" class="enlace-post">
-                      <h2 class="titulo-post">Título de la publicación o usuario</h2>
-                  </a>
-                  <p>
-                      <strong>Fecha: </strong><span class="datos-publicaciones">PostDate 11/30/2021</span>
-                  </p>
-                  <div id="imagen">
-                      <img src="img/codigo1.jpg" class="img-post" >
-                  </div>
-                  <p class="parrafo-post">
-                      It is a long established fact that a reader will be distracted by 
-                      the readable content of a page when looking at its layout. The point 
-                      of using Lorem Ipsum is that it has a more-or-less normal distribution 
-                      of letters, as opposed to using 'Content here, content here', making 
-                      it look like readable English. Many desktop publishing packages.
-                  </p>
-  
-                  <button class="like-btn">Me gusta <i class="fas fa-thumbs-up"></i></button> &nbsp;&nbsp;
-                  <section id="caja-comentarios">
-                      <form>
-                          <input type="text" name="comentarios" placeholder="Agregar comentario..." required>
-                          <button class="num-comentarios">Comentar <i class="fas fa-comment"></i></button>
-                      </form>
-                  </section>               
-              </article>
-           </section>
-           <section id="sidebar">
-               <section id="buscar2">
-                   <h2 class="encabezado-sidebar">Buscar</h2>
-                   <form>
-                       <input type="text" name="buscar" placeholder="Buscar posts..." required>
-                       <button class="boton">Ok</button>
-                   </form>
-               </section>
-               <section id="categorias">
-                   <h2 class="encabezado-sidebar">Categorías</h2>
-                   <a href="" class="enlace-sidebar">Categoría 1</a>
-                   <a href="" class="enlace-sidebar">Categoría 2</a>
-               </section>
-               <section id="organizar">
-                   <h2 class="encabezado-sidebar">Organizar</h2>
-                   <a href="" class="enlace-sidebar">Criterio 1</a>
-                   <a href="" class="enlace-sidebar">Criterio 2</a>
-               </section>
-               <section id="ultimos-post">
-                   <h2 class="encabezado-sidebar">Ultimas-publicaciones</h2>
-                   <a href="" class="enlace-sidebar">
-                       <h4>Título de la publicación o usuario 5</h4>
-                       <p class="parrafo-ultimas">Esto es una descripción de la noticia publicada el dia de hoy</p>
-                   </a>
-   
-                   <a href="" class="enlace-sidebar">
-                       <h4>Título de la publicación o usuario 4</h4>
-                       <p class="parrafo-ultimas">Esto es una descripción de la noticia publicada el dia de hoy</p>
-                   </a>
-   
-                   <a href="" class="enlace-sidebar">
-                       <h4>Título de la publicación o usuario 3</h4>
-                       <p class="parrafo-ultimas">Esto es una descripción de la noticia publicada el dia de hoy</p>
-                   </a>
-   
-                   <a href="" class="enlace-sidebar">
-                       <h4>Título de la publicación o usuario 2</h4>
-                       <p class="parrafo-ultimas">Esto es una descripción de la noticia publicada el dia de hoy</p>
-                   </a>
-               </section>
-            </section>
+<div class="posts">
+    <div class="posts-container">
+        <h1 class="lg-title">Muro</h1>
+        <div class="post-items">
+            <div v-for="post in posts" :key="post.id" class="publicaciones">
+                <div class="container_post">
+                    <div class="post-username">
+                        <h1>{{ post.username }}</h1>
+                    </div>
+                    <div class="post-img">
+                        <img v-bind:src="post.imagen" v-bind:alt="post.username">
+                    </div>
+                    <div class="post-detail">
+                        <p>{{ post.description }}</p>
+                        <p>
+                            <strong>Fecha: </strong><span class="datos-publicaciones">{{post.postdate}}</span>
+                        </p>
+                    </div>
+                    <div class="botones">
+                        <button class="like-btn">Me gusta <i class="fas fa-thumbs-up"></i></button> &nbsp;&nbsp;
+                        <section id="caja-comentarios">
+                            <form>
+                                <input type="text" name="comentarios" placeholder="Agregar comentario..." required>
+                                <button class="num-comentarios">Comentar <i class="fas fa-comment"></i></button>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>>
         </div>
     </div>
+</div>
+
+  
 </template>
 <script>
-
+import gql from 'graphql-tag';
+export default {
+  name: "Post",
+  data: function () {
+    return {
+      posts: [
+          {
+          id: null,
+          username : null,
+          image:  null,
+          description: null,
+          like: [{
+            id: null,
+            usernameOrigin: null,
+            postIdDestiny: null,
+            likedate: null,
+          }],
+          postdate: null,
+          categoria: null,
+          comments: [{
+            id: null,
+            usernameOrigin: null,
+            postIdDestiny: null,
+            commentdate: null,
+            message: null,
+          }],
+          
+          }],
+      post: 0,
+    };
+    
+  },
+  apollo:{
+       posts:{
+           query: gql`
+           query Query($constante: String) {
+                    postAll(constante: $constante) {
+                      id
+                      username
+                      image
+                      description
+                      like {
+                        id
+                        usernameOrigin
+                        postIdDestiny
+                        likedate
+                      }
+                      postdate
+                      categoria
+                      comments {
+                        id
+                        usernameOrigin
+                        postIdDestiny
+                        commentdate
+                        message
+                      }
+                    }
+                  }`,
+           variables(){
+               return{
+                   constante: null,
+               }
+           }
+        },
+  },
+  created() {
+      
+  }
+};
 </script>
 
 <style>

@@ -1,5 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
+import LogIn from './components/LogIn.vue'
+import SignUp from './components/SignUp.vue'
+import UserInfo from './components/UserInfo.vue'
+import Post from './components/Post.vue'
 
 const routes = [
   {
@@ -22,7 +26,7 @@ const routes = [
     name: 'userInfo',
     component: UserInfo
   }, {
-    path: '/post/',
+    path: '/post',
     name: 'post',
     component: Post
   }

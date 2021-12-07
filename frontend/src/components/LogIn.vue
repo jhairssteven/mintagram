@@ -1,58 +1,64 @@
 <template>
   <div class="logIn_user">
     <section class="form-Login">
+      <img class="imagenlogo" src="../assets/mintagram.png">
       <h2>Iniciar sesión</h2>
-      <img class="imagenlogo" src="mintagram.png">
+      
       <form v-on:submit.prevent="processLogInUser">
-        <input type="email" v-model="user.username" placeholder="Correo" />
+        <input type="email" v-model="user.email" placeholder="Correo">
         <br />
-        <input type="password" v-model="user.password" placeholder="Password" />
+        <input type="password" v-model="user.password" placeholder="Password">
         <br />
         <button class="botons" type="submit">Iniciar Sesion</button>
       </form>
-      <p> ¿No tienes una cuenta? <a href="#"> <br>Registrate </a></p>
+      <p> ¿No tienes una cuenta? <a v-on:click="loadSignUp"> <br>Registrate </a></p>
     </section>
   </div>
 </template>
 
 <script>
 import gql from "graphql-tag";
+
 export default {
   name: "LogIn",
+
   data: function () {
     return {
       user: {
         email: "",
-        password: "",
+        password: ""
       },
     };
   },
 
   methods: {
+     loadSignUp: function () {
+      this.$router.push({ name: "signUp" });
+    },
     processLogInUser: async function () {
-      await this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation ($credentials: CredentialsInput!) {
-              logIn(credentials: $credentials) {
-                refresh
-                access
+      await this.$apollo.mutate({
+          mutation: gql
+            `mutation Mutation($credentials: Login!) {
+             logIn(credentials: $credentials) {
+                  refresh
+                  access
               }
-            }
-          `,
+            }`
+          ,
           variables: {
             credentials: this.user,
           },
         })
         .then((result) => {
           let dataLogIn = {
-            username: this.user.username,
+            email: this.user.email,
             token_access: result.data.logIn.access,
             token_refresh: result.data.logIn.refresh,
           };
           this.$emit("completedLogIn", dataLogIn);
         })
         .catch((error) => {
+          console.log(error);
           alert("ERROR 401: Credenciales Incorrectas.");
         });
     },
