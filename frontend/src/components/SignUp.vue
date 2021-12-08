@@ -2,20 +2,29 @@
   <div class="signUp_user">
     <section class="form_signUp_user">
       <h2>Registrarse</h2>
-      <img class="imagenlogo" src="Imagenes/mintagram.png">
+      <!-- <img class="imagenlogo" src="Imagenes/mintagram.png" /> -->
       <form v-on:submit.prevent="processSignUp">
         <input type="text" v-model="user.username" placeholder="Username" />
         <br />
         <input type="email" v-model="user.email" placeholder="Correo" />
         <br />
-        <input type="password" v-model="user.password" placeholder="Contraseña"/>
+        <input
+          type="password"
+          v-model="user.password"
+          placeholder="Contraseña"
+        />
         <br />
         <input type="text" v-model="user.name" placeholder="Profile_Image" />
         <br />
         <input type="text" v-model="user.name" placeholder="Ocupation" />
         <br />
         <button type="submit">Registrarse</button>
-        <p> ¿Ya tienes una cuenta? <a href="#"> <br>Inicia Sesion </a></p>
+        <p><br>
+          ¿Ya tienes una cuenta?
+          <a v-on:click="loadLogInPage" style="color: #46cef0; cursor: pointer">
+            <br />Inicia Sesion
+          </a>
+        </p>
       </form>
     </section>
   </div>
@@ -37,6 +46,9 @@ export default {
     };
   },
   methods: {
+    loadLogInPage: function () {
+      this.$router.push({ name: "logIn" });
+    },
     processSignUp: async function () {
       await this.$apollo
         .mutate({
@@ -64,6 +76,9 @@ export default {
           alert("ERROR: Fallo en el registro.");
         });
     },
+  },
+  created: function () {
+    this.$emit("is_inSignUp", true);
   },
 };
 </script>
@@ -118,14 +133,14 @@ export default {
   background: crimson;
   border: 1px solid #283747;
 }
-.signUp_user p{
-    height: 40px;
-    text-align: center;
-    font-size: 18px;
+.signUp_user p {
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
 }
 
-.imagenlogo{
-    width: 70%;
-    height: 50%;
+.imagenlogo {
+  width: 70%;
+  height: 50%;
 }
 </style>
