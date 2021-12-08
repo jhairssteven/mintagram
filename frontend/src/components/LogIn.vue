@@ -1,7 +1,6 @@
 <template>
   <div class="logIn_user">
     <section class="form-Login">
-      <img class="imagenlogo" src="../assets/mintagram.png">
       <h2>Iniciar sesión</h2>
       <!-- <img class="imagenlogo" src="@/assets/mintagram.png"> -->
       <form v-on:submit.prevent="processLogInUser">
