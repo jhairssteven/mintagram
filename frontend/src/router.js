@@ -4,7 +4,10 @@ import LogIn from './components/LogIn.vue'
 import SignUp from './components/SignUp.vue'
 import UserInfo from './components/UserInfo.vue'
 import Post from './components/Post.vue'
+<<<<<<< HEAD
 import Chats from './components/Chats.vue'
+=======
+>>>>>>> f7b9c3f0462ce140eabcba25653f1d78d54c343a
 
 const routes = [
   {

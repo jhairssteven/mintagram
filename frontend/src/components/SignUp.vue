@@ -1,6 +1,7 @@
 <template>
   <div class="signUp_user">
     <section class="form_signUp_user">
+      <img class="imagenlogo" src="../assets/mintagram.png">
       <h2>Registrarse</h2>
       <!-- <img class="imagenlogo" src="Imagenes/mintagram.png" /> -->
       <form v-on:submit.prevent="processSignUp">
@@ -14,9 +15,9 @@
           placeholder="Contraseña"
         />
         <br />
-        <input type="text" v-model="user.name" placeholder="Profile_Image" />
+        <input type="text" v-model="user.profile_image" placeholder="Profile_Image" />
         <br />
-        <input type="text" v-model="user.name" placeholder="Ocupation" />
+        <input type="text" v-model="user.ocupation" placeholder="Ocupation" />
         <br />
         <button type="submit">Registrarse</button>
         <p><br>
@@ -38,10 +39,11 @@ export default {
     return {
       user: {
         username: "",
-        email: "",
         password: "",
-        profile_image: "",
         ocupation: "",
+        email: "",
+        profile_image: "",
+        
       },
     };
   },
@@ -50,29 +52,29 @@ export default {
       this.$router.push({ name: "logIn" });
     },
     processSignUp: async function () {
-      await this.$apollo
-        .mutate({
+      console.log(this.user)
+      await this.$apollo.mutate({
           mutation: gql`
-            mutation ($userInput: SignUp!) {
-              signUpUser(userInput: $userInput) {
-                refresh
-                access
+          mutation Mutation($userInput: SignUp) {
+            signUpUser(userInput: $userInput) {
+              refresh
+              access
               }
             }
           `,
           variables: {
             userInput: this.user,
           },
-        })
-        .then((result) => {
-          let dataLogIn = {
-            username: this.user.username,
+        }).then((result) => {
+          let dataSignUp = {
+            email: this.user.email,
             token_access: result.data.signUpUser.access,
             token_refresh: result.data.signUpUser.refresh,
           };
-          this.$emit("completedSignUp", dataLogIn);
+          this.$emit("completedSignUp", dataSignUp);
         })
         .catch((error) => {
+          console.log(error);
           alert("ERROR: Fallo en el registro.");
         });
     },
