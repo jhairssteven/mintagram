@@ -21,10 +21,11 @@ from userProfileApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('u/login/',            TokenObtainPairView.as_view()), # user login
-    path('u/refresh/',          TokenRefreshView.as_view()),    # user token refresh
-    path('u/signup/',            views.UserCreateView.as_view()), # user signup
-    path('u/e/<email>/',        views.EmailExistsView.as_view()),  # check email exists
-    path('u/id/<int:pk>/',  views.UserDetailView.as_view()), # get user detail- el endpoint tiene que llamrse <int:pk>
-    path('verifyToken/', views.VerifyTokenView.as_view())
+    path('u/login/',        TokenObtainPairView.as_view()),     # user login
+    path('u/refresh/',      TokenRefreshView.as_view()),        # user token refresh
+    path('u/signup/',       views.UserCreateView.as_view()),    # user signup
+    path('u/e/<email>/',    views.EmailExistsView.as_view()),   # check email exists
+    path('u/id/<int:pk>/',  views.UserDetailView.as_view()),    # get user detail - el endpoint tiene que llamrse <int:pk>
+    path('u/<username>/',   views.UserDetailByUsernameView.as_view()), #get all users containing given <username> on its own username
+    path('verifyToken/',    views.VerifyTokenView.as_view())
 ]
