@@ -1,2 +1,7 @@
 
-from .messageView     import AllMessagesView, MessageFilterView, MessageDetailView, MessageCreateView, MessageDeleteView
+from .messageView import (AllSentToMeMessages, 
+                         AllMessagesView, 
+                         MessageFilterView, 
+                         MessageDetailView, 
+                         MessageCreateView, 
+                         MessageDeleteView)

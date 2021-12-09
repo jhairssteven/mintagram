@@ -9,6 +9,15 @@ from authApp.models.message import Message
 from authApp.serializers.messageSerializer import MessageSerializer
 
 
+# traer todos los mensajes que le han sido enviados al usuario
+class AllSentToMeMessages(generics.ListCreateAPIView):
+    queryset           = Message.objects.all()
+    serializer_class   = MessageSerializer
+
+    def get_queryset(self):
+        queryset = Message.objects.filter(destiny_user = int(self.kwargs['userId']))
+        return queryset
+
 # traer todos los mensajes que ha enviado el usuario
 class AllMessagesView(generics.ListCreateAPIView):
     queryset           = Message.objects.all()
