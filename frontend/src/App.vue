@@ -5,7 +5,7 @@
         <div id="encabezado">
           <div id="logo">
             <img
-              v-on:click="verifyAuth"
+              v-on:click="loadMainPage"
               src="@/assets/mintagram.png"
               alt=""
               style="cursor: pointer"
@@ -81,6 +81,7 @@
         v-on:completedLogIn="completedLogIn"
         v-on:completedSignUp="completedSignUp"
         v-on:is_inSignUp="is_inSignUp"
+        
       >
       </router-view>
     </div>
@@ -95,47 +96,70 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
 import Post from "./components/Post.vue";
+import jwt_decode from "jwt-decode";
+
 export default {
   name: "App",
+  
+  computed: {
+    is_auth: {
+      get: function () {
+        return this.$route.meta.requiresAuth;
+      },
+      set: function() {}
+    }
+  },
+
   components: {
     Post,
   },
+
   data: function () {
     return {
-      is_auth: true,
       inSignUp: false,
     };
   },
+  
   methods: {
-    verifyAuth: function () {
-      // this.is_auth = localStorage.getItem("isAuth") || false;
-      if (this.is_auth == false) this.$router.push({ name: "logIn" });
-      else this.$router.push({ name: "post" });
-      
+    completedLogIn: function (dataLogIn) {
+      localStorage.setItem("token_access", dataLogIn.token_access);
+      localStorage.setItem("token_refresh", dataLogIn.token_refresh);
+      this.$router.push({name: "post"});
     },
-    completedLogIn: function (data) {},
-    completedSignUp: function (data) {},
+
+    completedSignUp: function (dataSignUp) {
+      localStorage.setItem("token_access", dataLogIn.token_access);
+      localStorage.setItem("token_refresh", dataLogIn.token_refresh);
+    },
     is_inSignUp: function (data) {
       this.inSignUp = data;
     },
+
     logOut: function () {
-      this.is_auth = false;
-      this.verifyAuth();
+      localStorage.clear();
+      this.loadLogInPage();
     },
+
     loadMainPage: function () {
-      this.verifyAuth();
+      // this.verifyAuth();
+      this.$router.push({name: "post"})
     },
+
     loadLogInPage: function () {
       this.$router.push({ name: "logIn" });
       this.inSignUp = false;
     },
+
     loadSignUpPage: function () {
       this.$router.push({ name: "signUp" });
     },
+
     loadUserProfilePage: function () {
       alert("load user profile page");
     },
+
     loadChatsPage: function () {
       this.$router.push({ name: "chats" });
     },
@@ -150,9 +174,6 @@ export default {
     },
   },
 
-  created: function () {
-    this.verifyAuth();
-  },
 };
 </script>
 

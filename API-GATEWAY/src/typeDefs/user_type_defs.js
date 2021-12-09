@@ -37,7 +37,7 @@ const userTypeDefs = gql `
     }
    
     type Query {
-        userDetailbyId(userId: Int!):UserDetail!
+        userDetailbyId(userId: Int!): UserDetail!
     }
     
     type Mutation {

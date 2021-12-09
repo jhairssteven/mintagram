@@ -2,11 +2,10 @@
   <div class="back-container">
     <div class="front-container1">
       <div class="row chat-top border-top border-left border-right">
-        
         <!-- top of contacts panel, profile phot search, etc -->
         <div class="col-sm-4 border-right border-secondary">
           <img
-            :src="require(`@/${user.profile_img}`)"
+            :src="user.profile_image"
             alt=""
             class="profile-image rounded-circle"
           />
@@ -63,7 +62,7 @@
         <!-- current chat contact name top bar -->
         <div class="col-sm-8">
           <img
-            :src="require(`@/${chatUser.profile_img}`)"
+            :src="chatUser.profile_image"
             alt=""
             class="profile-image rounded-circle"
           />
@@ -115,8 +114,9 @@
                 >
                   <td>
                     <!-- "rerquire(`@..." to use local imgs, for urls just use :src="URL" -->
+                    <!-- :src="require(`@/${contact.profile_image}`)" -->
                     <img
-                      :src="require(`@/${contact.img_src}`)"
+                      :src="contact.profile_image"
                       alt=""
                       class="profile-image rounded-circle"
                     />
@@ -269,16 +269,27 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
+import jwt_decode from "jwt-decode";
+
 export default {
   name: "Chats",
 
   data: function () {
     return {
+      userDetailbyId: {
+        id_user: "",
+        username: "",
+        email: "",
+        profile_image: "",
+        ocupation: "",
+      },
+      
       user: {
         id_user: "1",
         username: "Daniela McCallister",
         email: "raul@mintagram.com",
-        profile_img: "images/p3.jpg",
+        profile_image: "images/p3.jpg",
         ocupation: "Desarrolladora",
       },
       chatUser: {
@@ -286,18 +297,18 @@ export default {
         id_user: "2",
         username: "Raul Castañeda",
         email: "raul@mintagram.com",
-        profile_img: "images/p2.jpg",
+        profile_image: "images/p2.jpg",
         ocupation: "Ingeniero de Software",
       },
       contacts_list: [
         {
-          img_src: "images/p2.jpg",
+          profile_image: "images/p2.jpg",
           user_name: "Raul Castañeda",
           last_msg: "Would you like to come?",
           date_last_msg: "11:04 PM",
         },
         {
-          img_src: "images/p1.jpg",
+          profile_image: "images/p1.jpg",
           user_name: "Brad Pitt",
           last_msg: "see you later...",
           date_last_msg: "2:04 AM",
@@ -324,6 +335,26 @@ export default {
     };
   },
 
+  apollo: {
+    userDetailbyId: {
+      query: gql`
+        query ($userId: Int!) {
+          userDetailbyId(userId: $userId) {
+            id_user
+            username
+            email
+            profile_image
+            ocupation
+          }
+        }
+      `,
+      variables() {
+        return {
+          userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+        };
+      },
+    },
+  },
   methods: {
     openContactChat: function (userName) {
       alert(userName);
@@ -332,7 +363,10 @@ export default {
       let msg = document.getElementById("sendMsgInputForm").value;
       let hrs = new Date().getHours();
       let currentTime =
-        (hrs > 12 ? hrs - 12 : hrs) + ":" + new Date().getMinutes() + (hrs > 12 ? " PM" : " AM");
+        (hrs > 12 ? hrs - 12 : hrs) +
+        ":" +
+        new Date().getMinutes() +
+        (hrs > 12 ? " PM" : " AM");
 
       if (msg != "" && msg != null) {
         this.chat.push({
@@ -350,6 +384,23 @@ export default {
         document.getElementById("sendMsgInputForm").focus();
       }
     },
+
+    getLoggedUserData: async function () {
+      // await this.$emit("refresh_the_token");
+      await this.$apollo.queries.userDetailbyId.refetch();      
+      this.user = this.userDetailbyId;
+
+      console.log("user:" + JSON.stringify(this.user))
+      console.log("userDetailbyId:" + JSON.stringify(this.userDetailbyId))
+    },
+    getContactList: async function () {},
+    getChatWithUser: async function (userId) {},
+  },
+
+  created: function () {
+    this.getLoggedUserData();
+    // getContactList();
+    // getChatWithUser(userId);
   },
 };
 </script>
