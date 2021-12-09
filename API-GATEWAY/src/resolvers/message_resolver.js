@@ -1,52 +1,131 @@
 const messageResolver = {
     Query: {
-            allMessagesByUserId: async(_,{origin_user}, {dataSources, userIdToken}) => {
-                idUserToken = (await dataSources.user_profile_API.getUser(userIdToken)).id_user
-                if (origin_user == idUserToken) {
-                    return await dataSources.messageAPI.getAllMessages(origin_user)
-                } else {
-                    return null
-                }
-            },
+        chatBetween: async (_, { userOriginId, userDestinyId }, { dataSources, userIdToken }) => {
+            if (userOriginId == userIdToken) {
+                let msgFromTo = await dataSources.messageAPI.getConversation(userOriginId, userDestinyId);
+                let msgToFrom = await dataSources.messageAPI.getConversation(userDestinyId, userOriginId);
 
-            allMessagesByLocutors: async(_, {userOriginId, userDestinyId}, {dataSources, userIdToken}) => {
-                //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
-                if(userOriginId == userIdToken) {
-                    return await dataSources.messageAPI.getConversation(userOriginId, userDestinyId)
-                } else {
-                    return null
-                }
-            },
+                return getChat(msgFromTo, msgToFrom);
+            } else {
+                return null
+            }
+        },
 
-            messageById: async(_, {userOriginId, messageId}, {dataSources, userIdToken}) => {
-                //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
-                if (userOriginId == userIdToken) {
-                    return await dataSources.messageAPI.getUserMessage(userOriginId, messageId)
-                } else {
-                    return null
+        allChatsUserDetails: async (_, { userOriginId }, { dataSources, userIdToken }) => {
+            if (userOriginId == userIdToken) {
+                // let userIdsThatHaveSendMsgsToMe = 
+                //         await dataSources.messageAPI.getSendToMeMsgsUserIds(userOriginId);
+                let userIdsThatHaveSendMsgsToMe = [3, 4, 10, 18];
+                let contacts_list = [];
+
+                for (var i = 0; i < userIdsThatHaveSendMsgsToMe.length; i++) {
+                    let contact = await getContact(dataSources, userOriginId, userIdsThatHaveSendMsgsToMe[i]);
+                    if (contact != null) contacts_list.push(contact);
                 }
-                
-            },
-            
+
+                return contacts_list;
+
+            } else {
+                return null
+            }
+        },
+
+        allMessagesByUserId: async (_, { origin_user }, { dataSources, userIdToken }) => {
+            idUserToken = (await dataSources.user_profile_API.getUser(userIdToken)).id_user
+            if (origin_user == idUserToken) {
+                return await dataSources.messageAPI.getAllMessages(origin_user)
+            } else {
+                return null
+            }
+        },
+
+        allMessagesByLocutors: async (_, { userOriginId, userDestinyId }, { dataSources, userIdToken }) => {
+            //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
+            if (userOriginId == userIdToken) {
+                return await dataSources.messageAPI.getConversation(userOriginId, userDestinyId)
+            } else {
+                return null
+            }
+        },
+
+        messageById: async (_, { userOriginId, messageId }, { dataSources, userIdToken }) => {
+            //idUserToken = (await dataSources.authAPI.getUser(userIdToken)).id_user
+            if (userOriginId == userIdToken) {
+                return await dataSources.messageAPI.getUserMessage(userOriginId, messageId)
+            } else {
+                return null
+            }
+
+        },
+
     },
 
     Mutation: {
         // createMessage(message: Message!)
         // deleteMessage(data: DeleteMessageInput!): String
-        createMessage: async(_, {message}, {dataSources, userIdToken}) => {
+        createMessage: async (_, { message }, { dataSources, userIdToken }) => {
             if (userIdToken != null)
-              return await dataSources.messageAPI.createMessage(message)
+                return await dataSources.messageAPI.createMessage(message)
             else
-               return null
+                return null
         },
-        
-        deleteMessage: async(_, {userOriginId, messageId}, {dataSources, userIdToken}) => {
+
+        deleteMessage: async (_, { userOriginId, messageId }, { dataSources, userIdToken }) => {
             if (userOriginId == userIdToken)
-              return await dataSources.messageAPI.deleteMessage(userOriginId, messageId)
+                return await dataSources.messageAPI.deleteMessage(userOriginId, messageId)
             else
-              return null
+                return null
         }
     }
+};
+
+async function getContact(dataSources, userOriginId, userDestinyId) {
+    // let userDestinyId = userIdsThatHaveSendMsgsToMe[i];
+    let msgFromTo = await dataSources.messageAPI.getConversation(userOriginId, userDestinyId);
+    let msgToFrom = await dataSources.messageAPI.getConversation(userDestinyId, userOriginId);
+
+    let chat = getChat(msgFromTo, msgToFrom);
+
+    /** When there aren't any messages between "origin" and "destiny" user 
+     * the service returns an empty list or a null object
+     * */
+
+    if (chat.length != 0) {
+        let lastChatMsg = chat[chat.length - 1];
+        let destinyUser = await dataSources.user_profile_API.getUser(userDestinyId);
+        let contact = {
+            "id_user": destinyUser["id_user"],
+            "profile_image": destinyUser["profile_image"],
+            "username": destinyUser["username"],
+            "last_msg": lastChatMsg["text"],
+            "date_last_msg": lastChatMsg["register_date"],
+            "isSendByOriginUser": (lastChatMsg["origin_user"] == userOriginId)
+        };
+        return contact;
+    }
+
+    return null;
+}
+
+function getChat(msgFromTo, msgToFrom) {
+    let chatUnsorted = msgFromTo.concat(msgToFrom)
+
+    let mgs_dates = [];
+    for (var i = 0; i < chatUnsorted.length; i++) {
+        mgs_dates.push(chatUnsorted[i]["register_date"]);
+    }
+
+    mgs_dates.sort();
+
+    let chat = [];
+    for (var j = 0; j < mgs_dates.length; j++) {
+        for (var i = 0; i < chatUnsorted.length; i++) {
+            if (chatUnsorted[i]["register_date"] == mgs_dates[j]) {
+                chat.push(chatUnsorted[i])
+            }
+        }
+    }
+    return chat;
 };
 
 module.exports = messageResolver;
