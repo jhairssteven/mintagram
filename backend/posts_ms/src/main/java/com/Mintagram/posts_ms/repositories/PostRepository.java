@@ -14,4 +14,5 @@ public interface PostRepository extends MongoRepository<Post, String>{
     //Post findByImageId (String image_id);
     Post findByLikeId (String like_id);
     Post findByCommentsId (String comments_id);
+    List<Post> findByUsernameLike(String username);
 }

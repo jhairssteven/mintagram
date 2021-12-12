@@ -8,14 +8,18 @@ import SignUp from './components/SignUp.vue'
 import UserInfo from './components/UserInfo.vue'
 import Post from './components/Post.vue'
 import Chats from './components/Chats.vue'
+import PostDetail from './components/PostDetail.vue'
+import PostByUsername from './components/PostByUsername.vue'
+import PostByCategory from './components/PostByCategory.vue'
+import CreatePost from './components/CreatePost.vue'
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'root',
-  //   component: App,
-  //   meta: { requiresAuth: true}
-  // },
+  /*{
+    path: '/',
+    name: 'root',
+    component: App,
+    meta: { requiresAuth: true}
+  },*/
   {
     path: '/user/logIn',
     name: 'logIn',
@@ -35,9 +39,33 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/',
+    path: '/muro',
     name: 'post',
     component: Post,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/postbyusername',
+    name: 'postbyusername',
+    component: PostByUsername,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/postbycategory',
+    name: 'postbycategory',
+    component: PostByCategory,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/postdetail',
+    name: 'postDetail',
+    component: PostDetail,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/agregarpost',
+    name: 'agregarpost',
+    component: CreatePost,
     meta: { requiresAuth: true }
   },
   {

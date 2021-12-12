@@ -16,6 +16,9 @@ class PostAPI extends RESTDataSource{
     async postByUsername(username){
         return await this.get(`/post/byuser/${username}/`);
     }
+    async postByUsernameLike(username){
+        return await this.get(`/post/byuserlike/${username}/`);
+    }
     async postByCategory(categoria){
         return await this.get(`/post/bycategoria/${categoria}/`);
     }

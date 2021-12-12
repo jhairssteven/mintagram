@@ -19,6 +19,13 @@ const postResolver={
             else{
                return null}
         },
+        postByUsernameLike: async (_, {username}, {dataSources, userIdToken})=>{
+         //usernameToken = (await dataSources.authAPI.getUser(userIdToken)).username
+         if (userIdToken!=null || userIdToken != ""){
+            return await dataSources.postAPI.postByUsernameLike(username)}
+         else{
+            return null}
+     },
 
         postByCategory: async (_,{categoria},{dataSources, userIdToken})=>{
             if (userIdToken!=null || userIdToken != ""){

@@ -66,6 +66,7 @@ export default {
             userInput: this.user,
           },
         }).then((result) => {
+
           let dataSignUp = {
             email: this.user.email,
             token_access: result.data.signUpUser.access,
@@ -81,6 +82,7 @@ export default {
   },
   created: function () {
     this.$emit("is_inSignUp", true);
+    //this.$emit("is_inLogin", false);
   },
 };
 </script>

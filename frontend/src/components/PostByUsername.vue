@@ -19,10 +19,6 @@
               class="img-post"
             />
           </div>
-          <p>
-            <strong>categoria: </strong
-            ><span class="post-category">{{ post.categoria }}</span>
-          </p>
           <p class="parrafo-post">
             {{ post.description }}
           </p>
@@ -36,98 +32,32 @@
         </div>
       </article>
     </section>
-    <section id="sidebar">
-      <section id="buscar2">
-        <h2 class="encabezado-sidebar">Buscar</h2>
-
-        <form v-on:submit.prevent="processFindPost">
-          <input
-            type="text"
-            name="buscar"
-            v-model="username"
-            placeholder="Buscar posts..."
-            required
-          />
-          <button class="boton" type="submit">Ok</button>
-        </form>
-      </section>
-
-      <section id="categorias">
-        <h2 class="encabezado-sidebar">Categorías</h2>
-        <form v-on:submit.prevent="processFindPostCategory">
-          <select v-model="category" name="select_category">
-            <option disable selected>Seleccione una categoria</option>
-            <option
-              v-for="post in postAll"
-              :key="post.id"
-              :value="post.categoria"
-            >
-              {{ post.categoria }}
-            </option>
-          </select>
-          <button type="submit" class="btn btn-info boton">Filtrar</button>
-        </form>
-      </section>
-      <!--<section id="ultimos-post">
-        <h2 class="encabezado-sidebar">Publicaciones mas populares</h2>
-        <a href="" class="enlace-sidebar">
-          <h4>Título de la publicación o usuario 5</h4>
-          <p class="parrafo-ultimas">
-            Esto es una descripción de la noticia publicada el dia de hoy
-          </p>
-        </a>
-
-        <a href="" class="enlace-sidebar">
-          <h4>Título de la publicación o usuario 4</h4>
-          <p class="parrafo-ultimas">
-            Esto es una descripción de la noticia publicada el dia de hoy
-          </p>
-        </a>
-
-        <a href="" class="enlace-sidebar">
-          <h4>Título de la publicación o usuario 3</h4>
-          <p class="parrafo-ultimas">
-            Esto es una descripción de la noticia publicada el dia de hoy
-          </p>
-        </a>
-
-        <a href="" class="enlace-sidebar">
-          <h4>Título de la publicación o usuario 2</h4>
-          <p class="parrafo-ultimas">
-            Esto es una descripción de la noticia publicada el dia de hoy
-          </p>
-        </a>
-      </section>-->
-    </section>
   </div>
 </template>
 <script>
 import gql from "graphql-tag";
-//import PostByUsername from './components/PostByUsername.vue'
 
 export default {
-  name: "Post",
+  name: "PostByUsername",
 
   data: function () {
     return {
-      postAll: [],
-      username: "",
-      category: "",
+      username: this.$route.params.username,
     };
   },
   computed: {
     sortedPost() {
-      return [...this.postAll].sort((a, b) => {
+      return [...this.postByUsernameLike].sort((a, b) => {
         if (a.postdate > b.postdate) return -1;
         else return 1;
       });
     },
   },
   apollo: {
-    postAll: {
+    postByUsernameLike: {
       query: gql`
-        query Query($constante: String) {
-          postAll(constante: $constante) {
+        query Query($username: String!) {
+          postByUsernameLike(username: $username) {
             id
             username
             image
@@ -152,43 +82,20 @@ export default {
       `,
       variables() {
         return {
-          constante: null,
+          username: this.username,
         };
       },
     },
   },
-
   methods: {
     loadPostDetailPage: function (id) {
       this.$router.push({ name: "postDetail", params: { id: id } });
     },
-     processFindPost: async function () {
-      //alert(this.username);
-      //let username1 = this.username;
-      this.FindPost(this.username);
-    },
-    FindPost: async function (username) {
-      //alert(this.username);
-      await this.$router.push({
-        name: "postbyusername",
-        params: { username: username },
-      });
-    },
-    processFindPostCategory: async function () {
-      //alert(this.category);
-      //let username1 = this.username;
-      await this.FindPostCategory(this.category);
-    },
-    FindPostCategory: async function (category) {
-      //alert(this.category);
-      await this.$router.push({
-        name: "postbycategory",
-        params: { category: category },
-      });
-    },
   },
   created: function () {
-    this.$apollo.queries.postAll.refetch();
+    this.$apollo.queries.postByUsernameLike.refetch();
+    //this.$apollo.queries.postAll.refetch();
+    
   },
 };
 </script>

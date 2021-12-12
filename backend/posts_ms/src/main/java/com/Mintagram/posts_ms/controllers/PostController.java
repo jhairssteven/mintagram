@@ -62,6 +62,11 @@ public class PostController {
         return postRepository.findByUsername(username);
     }
 
+    @GetMapping("/byuserlike/{username}")
+    List<Post> findPostByUsernameLike(@PathVariable String username){
+        return postRepository.findByUsernameLike(username);
+    }
+
     @GetMapping("/bycategoria/{categoria}")
     List<Post> findPostsByCategoria(@PathVariable String categoria){
         return postRepository.findByCategoria(categoria);

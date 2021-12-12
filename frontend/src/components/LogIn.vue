@@ -56,7 +56,6 @@ export default {
         })
         .then((result) => {
           let dataLogIn = {
-            email: this.user.email,
             token_access: result.data.logIn.access,
             token_refresh: result.data.logIn.refresh,
           };
@@ -64,7 +63,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR 401: Credenciales Incorrectas.");
+          alert("algo pasoo");
         });
     },
     loadSignUpPage: function () {
@@ -74,6 +73,7 @@ export default {
 
   created: function () {
     this.$emit("is_inSignUp", false);
+    //this.$emit("is_inLogin", true);
   },
 };
 </script>

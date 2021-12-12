@@ -61,6 +61,7 @@ input CommentInput{
       postById (postId : String!): Post
       postByUsername (username : String!): [Post]
       postByCategory (categoria : String!): [Post]
+      postByUsernameLike(username: String!): [Post]
       
       postByLikeId (likeId: String!): Post
       postByCommentId (commentId: String!): Post

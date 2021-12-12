@@ -45,6 +45,11 @@
                   <i class="fas fa-home"> Inicio</i></a
                 >
               </li>
+              <li @click="showwindow = true" v-if="is_auth">
+                <a v-on:click="loadCreatePost" class="enlace">
+                  <i class="fas fa-plus-square">Post</i></a
+                >
+              </li>
               <li v-if="is_auth">
                 <a v-on:click="loadChatsPage" class="enlace">
                   <i class="fas fa-comments"> Chats</i></a
@@ -81,7 +86,6 @@
         v-on:completedLogIn="completedLogIn"
         v-on:completedSignUp="completedSignUp"
         v-on:is_inSignUp="is_inSignUp"
-        
       >
       </router-view>
     </div>
@@ -98,40 +102,47 @@
 <script>
 import gql from "graphql-tag";
 import Post from "./components/Post.vue";
+import PostByUsername from "./components/PostByUsername.vue";
 import jwt_decode from "jwt-decode";
 
 export default {
   name: "App",
-  
+
   computed: {
     is_auth: {
       get: function () {
         return this.$route.meta.requiresAuth;
       },
-      set: function() {}
-    }
+      set: function () {},
+    },
   },
 
   components: {
     Post,
+    PostByUsername,
   },
 
   data: function () {
     return {
       inSignUp: false,
+
+      //showwindow: false,
+      //username: "",  
     };
   },
   
+
   methods: {
     completedLogIn: function (dataLogIn) {
+      //localStorage.setItem("username", dataLogIn.username);
       localStorage.setItem("token_access", dataLogIn.token_access);
       localStorage.setItem("token_refresh", dataLogIn.token_refresh);
-      this.$router.push({name: "post"});
+      this.$router.push({ name: "post" });
     },
 
-    completedSignUp: function (dataSignUp) {
-      localStorage.setItem("token_access", dataLogIn.token_access);
-      localStorage.setItem("token_refresh", dataLogIn.token_refresh);
+    completedSignUp: function (data) {
+      alert("Registro Exitoso");
+      this.completedLogIn(data);
     },
     is_inSignUp: function (data) {
       this.inSignUp = data;
@@ -144,7 +155,7 @@ export default {
 
     loadMainPage: function () {
       // this.verifyAuth();
-      this.$router.push({name: "post"})
+      this.$router.push({ name: "post" });
     },
 
     loadLogInPage: function () {
@@ -159,11 +170,13 @@ export default {
     loadUserProfilePage: function () {
       alert("load user profile page");
     },
+    loadCreatePost: function () {
+      this.$router.push({ name: "agregarpost" });
+    },
 
     loadChatsPage: function () {
       this.$router.push({ name: "chats" });
     },
-
     searchUsers: function (user) {
       let user2searchInput = document.getElementById("searchUserInputField");
       if (user2searchInput.value != null && user2searchInput.value != "") {
@@ -173,7 +186,9 @@ export default {
       }
     },
   },
-
+  created: function () {
+    //this.$apollo.queries.postAll.refetch();
+  },
 };
 </script>
 
