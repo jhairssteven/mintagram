@@ -182,11 +182,11 @@ body {
   margin: 0 0 0 0;
 }
 .header {
-  /* background: #01a9dc; */
-  background: #eeebebe8;
+  background: #01a9dc; 
+  /*background: #eeebebe8;*/
   width: 100%;
-  height: 7vh;
-  box-shadow: 0px 0px 9px #a4a4a4;
+  height: 9vh;
+  /*box-shadow: 0px 0px 9px #a4a4a4;*/
   border-bottom-style: solid;
   /* border-bottom-color: #01a9dc; */
   border-bottom-color: #440080;
@@ -211,6 +211,9 @@ body {
   font-size: 30px;
   align-items: center; */
 }
+#logo{
+  width: 400px;
+}
 
 #menu {
   /* width: 30%; */
@@ -218,6 +221,7 @@ body {
   float: right;
   text-align: right;
   margin-top: 10px;
+
   /* margin-bottom: 0px; */
 }
 
@@ -229,10 +233,11 @@ body {
 
 #menu ul li .enlace {
   display: inline-block;
-  color: #3d066d;
+  color: white;
   /* text-decoration: none; */
   padding: 10px;
   /* font-size: 16px; */
+  cursor: pointer;
 }
 
 /*accion cuando pasa el cursor sobre el enlace del menu*/
@@ -303,5 +308,6 @@ footer {
   min-height: 50px;
   bottom: 0;
   left: 0;
+  margin-top: 54px;
 }
 </style>

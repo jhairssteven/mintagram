@@ -20,9 +20,9 @@
         <input type="text" v-model="user.ocupation" placeholder="Ocupation" />
         <br />
         <button type="submit">Registrarse</button>
-        <p><br>
+        <p>
           ¿Ya tienes una cuenta?
-          <a v-on:click="loadLogInPage" style="color: #46cef0; cursor: pointer">
+          <a v-on:click="loadLogInPage" style="color: #46cef0; cursor: pointer; text-decoration: underline;">
             <br />Inicia Sesion
           </a>
         </p>
@@ -94,6 +94,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 50px;
 }
 
 .form_signUp_user {
@@ -105,6 +106,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 15px;
 }
 .signUp_user h2 {
   color: #283747;

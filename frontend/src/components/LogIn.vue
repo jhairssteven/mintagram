@@ -1,6 +1,7 @@
 <template>
   <div class="logIn_user">
     <section class="form-Login">
+      <img class="imagenlogo" src="../assets/mintagram.png">
       <h2>Iniciar sesión</h2>
       <!-- <img class="imagenlogo" src="@/assets/mintagram.png"> -->
       <form v-on:submit.prevent="processLogInUser">
@@ -12,7 +13,7 @@
       </form>
       <p>
         ¿No tienes una cuenta?
-        <a v-on:click="loadSignUpPage" style="color: #46cef0; cursor: pointer">
+        <a v-on:click="loadSignUpPage" style="color: #46cef0; cursor: pointer; text-decoration: underline;">
           <br />Registrate
         </a>
       </p>
@@ -78,6 +79,11 @@ export default {
 </script>
 
 <style>
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: black;
+}
 .logIn_user {
   margin: 0;
   padding: 0%;
@@ -89,16 +95,18 @@ export default {
   color: #46cef0;
 }
 .form-Login {
-  border: black;
-  width: 400px;
-  background: #631ea0;
-  padding: 30px;
-  margin: auto;
-  margin-top: 100px;
-  border-radius: 16px;
-  font-family: "calibri";
-  color: rgb(255, 255, 255);
-  box-shadow: 7px 14px 37px;
+    padding: 30px;
+    margin-top: 50px;
+    margin-bottom: 18px;
+    text-align: center;
+    border: 3px solid #283747;
+    border-radius: 10px;
+    width: 25%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .botons {
@@ -116,19 +124,19 @@ export default {
 }
 
 .form-Login h2 {
-  color: white;
+  color: #283747;
 }
 .form-Login form {
   width: 70%;
+  margin: auto;
 }
 .form-Login input {
   height: 40px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  margin: 9px 0;
-  border: 0px solid black;
-  border-radius: 7px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    margin: 5px 0;
+    border: 1px solid #283747;
 }
 .form-Login button {
   width: 100%;
