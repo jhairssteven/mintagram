@@ -248,7 +248,6 @@ export default {
   margin: 0 auto;
   padding: 15px;
   display: flex;
-  align-items: center;
   justify-content: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #e1e8ee;
@@ -308,8 +307,8 @@ export default {
   text-align: center;
 }
 #publicaciones .img-post {
-  width: auto;
-  height: auto;
+  width: 80%;
+  height: 80%;
   margin-left: auto;
   margin-right: auto;
   text-align: center;

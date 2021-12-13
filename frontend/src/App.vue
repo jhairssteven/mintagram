@@ -310,9 +310,9 @@ footer {
   justify-content: space-evenly;
 
   color: black;
-  margin-top: 27px;
+  margin-top: 30px;
   padding: 25px 5px 25px 5px;
-  background-color: #eeebebe8;
+  background-color: #afa1a1e8;
 
   border-top-style: solid;
   border-top-color: #440080;
@@ -323,6 +323,6 @@ footer {
   min-height: 50px;
   bottom: 0;
   left: 0;
-  margin-top: 54px;
+  margin-top: 10%;
 }
 </style>

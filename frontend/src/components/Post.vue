@@ -3,7 +3,7 @@
     <section id="publicaciones">
       <!-- Articulos -->
 
-      <article class="post">
+      <article>
         <div v-for="post in sortedPost" :key="post.id" class="post">
           <a class="enlace-post">
             <h2 class="titulo-post">{{ post.username }}</h2>
@@ -26,7 +26,7 @@
           <p class="parrafo-post">
             {{ post.description }}
           </p>
-          <p>
+          <p class="likesandcoments">
             <strong>Likes: </strong
             ><span class="datos-publicaciones">{{ post.like.length }}</span>
 
@@ -194,6 +194,7 @@ export default {
 </script>
 
 <style>
+
 /*-----post-----*/
 #principal {
   width: 80%;
@@ -228,8 +229,8 @@ export default {
   text-decoration: none;
 }
 #publicaciones a .titulo-post {
-  color: #6e6e6e;
-  font-size: 22px;
+  color: #8500ff;
+  font-size: 35px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 #publicaciones a .titulo-post:hover {
@@ -238,22 +239,26 @@ export default {
 /* imagen del post*/
 #imagen {
   text-align: center;
+  width: 100%;
 }
 #publicaciones .img-post {
-  width: auto;
-  height: auto;
+  width: 85%;
+  height: 85%;
   margin-left: auto;
   margin-right: auto;
   text-align: flex;
   margin: 7px;
   padding: 5px;
-  border: 2px solid #6e6e6e;
+  border: 2px solid #000000;
   border-radius: 5px;
+  margin-top: 35px;
+  margin-bottom: 35px;
 }
 
 #publicaciones .parrafo-post {
   margin-right: 15px;
-  margin-bottom: 7px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 #publicaciones .datos-publicaciones {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -389,5 +394,32 @@ form {
 #ultimos-post .parrafo-ultimas {
   margin-right: 15px;
   margin-bottom: 7px;
+}
+
+p.likesandcoments {
+    text-align: right;
+}
+
+footer {
+  align-items: center;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+
+  color: black;
+  margin-top: 30px;
+  padding: 25px 5px 25px 5px;
+  background-color: #afa1a1e8;
+
+  border-top-style: solid;
+  border-top-color: #440080;
+  border-top-width: 1px;
+
+  width: 100%;
+  height: 10vh;
+  min-height: 50px;
+  bottom: 0;
+  left: 0;
+  margin-top: 14%;
 }
 </style>

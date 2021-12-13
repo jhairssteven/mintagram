@@ -149,4 +149,27 @@ export default {
   width: 70%;
   height: 50%;
 }
+
+footer {
+  align-items: center;
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+
+  color: black;
+  margin-top: 30px;
+  padding: 25px 5px 25px 5px;
+  background-color: #afa1a1e8;
+
+  border-top-style: solid;
+  border-top-color: #440080;
+  border-top-width: 1px;
+
+  width: 100%;
+  height: 10vh;
+  min-height: 50px;
+  bottom: 0;
+  left: 0;
+  margin-top: 10%;
+}
 </style>
