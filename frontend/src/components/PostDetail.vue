@@ -10,6 +10,7 @@
           ><span class="datos-publicaciones">{{ postById.postdate }}</span>
         </p>
         <div id="imagen">
+
           <img v-bind:src="postById.image" class="img-post" />
         </div>
         <p>
@@ -22,7 +23,7 @@
       </article>
     </section>
     <section id="right-column">
-      <article class="post" id="post1">
+      <article id="post1">
         <h2 class="titulo-post">Comentarios</h2>
         <div
           v-for="comment in postById.comments"
@@ -40,7 +41,7 @@
           </p>
           <p class="parrafo-post">{{ comment.message }}</p>
         </div>
-        <section id="caja-comentarios">
+        <section id="caja-comentarios"> 
           <button v-on:click="processCreateLike" class="like-btn">
             <p>Me gusta <i class="fas fa-thumbs-up"></i></p>
           </button>
@@ -248,7 +249,6 @@ export default {
   margin: 0 auto;
   padding: 15px;
   display: flex;
-  align-items: center;
   justify-content: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #e1e8ee;
@@ -271,16 +271,16 @@ export default {
   margin: 10px auto;
 }
 
-#publicaciones {
+/*#publicaciones {
   width: 70%;
   height: auto;
   overflow: hidden;
   border: 0px solid red;
   margin-top: 10px;
   float: left;
-}
+}*/
 .post {
-  width: 96%;
+  width: 100%;
   height: auto;
   /* overflow: hidden; */
   padding: 7px;
@@ -307,7 +307,7 @@ export default {
 #imagen {
   text-align: center;
 }
-#publicaciones .img-post {
+/*#publicaciones .img-post {
   width: auto;
   height: auto;
   margin-left: auto;
@@ -317,7 +317,7 @@ export default {
   padding: 5px;
   border: 2px solid #6e6e6e;
   border-radius: 5px;
-}
+}*/
 
 #publicaciones .parrafo-post {
   margin-right: 15px;
@@ -381,4 +381,59 @@ export default {
   overflow-y: scroll;
   overflow-x: auto;
 }
+#imagen .img-post{
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+#left-column{
+  width: 60%;
+  height: auto;
+
+}
+#left-column .img-post{
+    width: 100%; 
+    height: auto;
+    margin-left: auto;  
+    text-align: center;
+    margin: 7px;
+    padding: 7px;
+    border-radius: 5px;
+}
+#right-column{
+  width: 35%;
+  margin-left: 20px;
+
+}
+.like-btn{
+   margin-top: 15px;
+    margin-left: 15px;
+    font-family: calibri;
+    font-size: 25px;
+    padding: 5px;
+    text-decoration: none;
+    background: #3d4f8c;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.num-comentarios{
+   margin-top: 15px;
+    margin-left: 15px;
+    font-family: calibri;
+    font-size: 25px;
+    padding: 5px;
+    text-decoration: none;
+    background: #3d4f8c;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+#caja-comentarios .like-btn{
+  color: white;
+  margin-bottom: 2px;
+
+}
+#caja-comentarios .num-comentarios{
+
+}
+
 </style>
