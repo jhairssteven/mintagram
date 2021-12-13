@@ -342,7 +342,15 @@ export default {
   color: white;
   background: rgb(37, 37, 87);
 }
-.container-publicaciones div > img {
+
+.container-publicaciones div >img{
+    width: 500px;
+    height: 250px;
+    cursor: pointer;
+    border: 2px solid rgb(57, 53, 88);
+} 
+.post{
+
   width: 500px;
   height: 250px;
   cursor: pointer;
