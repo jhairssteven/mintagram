@@ -28,6 +28,10 @@ class MessageAPI extends RESTDataSource {
     async deleteMessage (userId, messageId) {
         return await this.delete(`/message/remove/${userId}/${messageId}/`)
     }
+
+    async getSendToMeMsgsUserIds (userId) {
+        return await this.get(`allmessages/d/${userId}/`)
+    }
 }
 
 /*

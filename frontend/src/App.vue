@@ -50,27 +50,32 @@
                   <i class="fas fa-plus-square">Post</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="loadChatsPage" class="enlace">
                   <i class="fas fa-comments"> Chats</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="loadUserProfilePage" class="enlace"
                   ><i class="fas fa-user"> Mi perfil</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="logOut" class="enlace">
                   <i class="fas fa-sign-out-alt"> Salir</i></a
                 >
               </li>
-              <li v-if="!inSignUp && !is_auth">
+              <!-- <li v-if="!inSignUp && !is_auth"> -->
+                <li>
                 <a v-on:click="loadSignUpPage" class="enlace"
                   ><i class="fas fa-user-plus"> Registrarse</i></a
                 >
               </li>
-              <li v-if="inSignUp && !is_auth">
+              <!-- <li v-if="inSignUp && !is_auth"> -->
+                <li>
                 <a v-on:click="loadLogInPage" class="enlace"
                   ><i class="fas fa-user-circle"> Iniciar sesión</i></a
                 >

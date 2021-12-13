@@ -13,9 +13,14 @@ const messageResolver = {
 
         allChatsUserDetails: async (_, { userOriginId }, { dataSources, userIdToken }) => {
             if (userOriginId == userIdToken) {
-                // let userIdsThatHaveSendMsgsToMe = 
-                //         await dataSources.messageAPI.getSendToMeMsgsUserIds(userOriginId);
-                let userIdsThatHaveSendMsgsToMe = [3, 4, 10, 18];
+                let sendToMeMsgs = 
+                        await dataSources.messageAPI.getSendToMeMsgsUserIds(userOriginId);
+                let sendMsgsByMe = 
+                        await dataSources.messageAPI.getAllMessages(userOriginId)
+
+                let userIdsThatHaveSendMsgsToMe = getIdsFromMsgs(sendToMeMsgs, 'origin_user');
+                let userIdsIHaveSendMsgs = getIdsFromMsgs(sendMsgsByMe, 'destiny_user');
+                
                 let contacts_list = [];
 
                 for (var i = 0; i < userIdsThatHaveSendMsgsToMe.length; i++) {
@@ -23,7 +28,13 @@ const messageResolver = {
                     if (contact != null) contacts_list.push(contact);
                 }
 
-                return contacts_list;
+                for (var i = 0; i < userIdsIHaveSendMsgs.length; i++) {
+                    let contact = await getContact(dataSources, userOriginId, userIdsIHaveSendMsgs[i]);
+                    console.log("contact: " + JSON.stringify(contact))
+                    if (contact != null) contacts_list.push(contact);
+                }
+
+                return [...new Set(contacts_list)];
 
             } else {
                 return null
@@ -79,6 +90,14 @@ const messageResolver = {
     }
 };
 
+function getIdsFromMsgs(sendToMeMsgs, idUserType) {
+    let ids = [];
+    for (let ind = 0; ind < sendToMeMsgs.length; ind++) {
+        const msg = sendToMeMsgs[ind];
+        ids.push(msg[idUserType])        
+    }
+    return [...new Set(ids)];
+}
 async function getContact(dataSources, userOriginId, userDestinyId) {
     // let userDestinyId = userIdsThatHaveSendMsgsToMe[i];
     let msgFromTo = await dataSources.messageAPI.getConversation(userOriginId, userDestinyId);

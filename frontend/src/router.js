@@ -14,12 +14,12 @@ import PostByCategory from './components/PostByCategory.vue'
 import CreatePost from './components/CreatePost.vue'
 
 const routes = [
-  /*{
+  {
     path: '/',
     name: 'root',
     component: App,
     meta: { requiresAuth: true}
-  },*/
+  },
   {
     path: '/user/logIn',
     name: 'logIn',
