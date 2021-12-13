@@ -30,7 +30,7 @@
       <h2 class="titulo"> <strong> MIS PUBLICACIONES</strong></h2></div>
       <br>
 
-        <div v-for="post in postByUsername" :key="post.id" class="post">
+        <div v-for="post in sortedPost" :key="post.id" class="post">
           <a class="enlace-post">
             <h2 class="titulo-post">{{ post.username }}</h2>
           </a>
@@ -92,9 +92,16 @@ export default {
       }*/
     };
   },
-  /*query que se carga por defecto sin espichar un boton,
-    pero yo si necesito el que necesita espichar un boton 
-    este es el que va en espichar perfil*/
+
+  computed: {
+    sortedPost() {
+      return [...this.postByUsername].sort((a, b) => {
+        if (a.postdate > b.postdate) return -1;
+        else return 1;
+      });
+    },
+  },
+  
   apollo: {
     userDetailbyId: {
       query: gql`
@@ -144,7 +151,7 @@ export default {
       `,
       variables() {
         return {
-          username: "marta"
+          username: this.userDetailbyId.username
         };
       },
     },

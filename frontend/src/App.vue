@@ -50,9 +50,8 @@
                   <i class="fas fa-plus-square">Post</i></a
                 >
               </li>
-              <!-- <li v-if="is_auth"> -->
-                <li>
-                <a v-on:click="loadChatsPage" class="enlace">
+              <li v-if="is_auth">
+                <a v-on:click="loadChatsPage()" class="enlace">
                   <i class="fas fa-comments"> Chats</i></a
                 >
               </li>
@@ -130,6 +129,7 @@ export default {
   data: function () {
     return {
       inSignUp: false,
+      //userId = jwt_decode(localStorage.getItem("token_refresh")).user_id,
 
       //showwindow: false,
       //username: "",  
@@ -176,8 +176,13 @@ export default {
       this.$router.push({ name:"userInfo"})
     },
     loadCreatePost: function () {
-      this.$router.push({ name: "agregarpost" });
+      this.$router.push({ name: "agregarpost"});
     },
+    
+    
+    /*loadCreatePost: function (id) {
+      this.$router.push({ name: "agregarpost", params: { id: id }  });
+    },*/
 
     loadChatsPage: function () {
       this.$router.push({ name: "chats" });

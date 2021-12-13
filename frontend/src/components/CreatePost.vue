@@ -1,113 +1,249 @@
 <template>
   <div class="container_all">
-    <div class="modal" tabindex="-1" id="modal1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <form v-on:submit.prevent="processCreatePost">
-            <input type="text" placeholder="Imagen" />
-            <br />
-            <input
-              type="text"
-              
-              placeholder="Descripcion"
-            />
-            <br />
-            <select  name="select_category">
-              <option disable selected>Seleccione una categoria</option>
-              <option>Ayuda</option>
-              <option>Preguntas</option>
-              <option>Experiencias</option>
-              <option>Desarrollos</option>
-              <option>Proyectos</option>
-            </select>
-            <button type="submit" data-dismiss='modal'>Registrarse</button>
-          </form>
-        </div>
-      </div>
-    </div>
-    <button class="btn btn-primary" type="button" data-toggle='modal' data-target='#modal1'>Registrarse</button>
-  </div>
-
-   
-
-  <!-- <h2>Agregar Post</h2>
-        <img class="imagenlogo" src="Imagenes/mintagram.png" /> 
-        <form v-on:submit.prevent="processSignUp">
-          <input type="text" v-model="post.image" placeholder="Imagen" />
+    <div class="post_create">
+      <section class="form_create_post">
+        <form v-on:submit.prevent="getUser">
+          <h2>Anade tu post</h2>
+          <input v-model="post.image" type="text" placeholder="Imagen" />
           <br />
-          <input type="text" v-model="post.description" placeholder="Descripcion" />
+          <input
+            v-model="post.description"
+            type="text"
+            placeholder="Descripcion"
+          />
           <br />
-           <select v-model="post.category" name="select_category">
-              <option disable selected>Seleccione una categoria</option>
-              <option>Ayuda</option>
-              <option>Preguntas</option>
-              <option>Experiencias</option>
-              <option>Desarrollos</option>
-              <option>Proyectos</option>
-            </select>
-            <button type="submit">Registrarse</button>
+          <select v-model="post.categoria" name="select_category">
+            <option disable selected>Seleccione una categoria</option>
+            <option>Ayuda</option>
+            <option>Preguntas</option>
+            <option>Experiencias</option>
+            <option>Desarrollos</option>
+            <option>Proyectos</option>
+          </select>
+          <button type="submit">Crear Post</button>
+          <br />
         </form>
       </section>
     </div>
-  </div>-->
+  </div>
 </template>
 
 <script>
 import gql from "graphql-tag";
+import jwt_decode from "jwt-decode";
+
 export default {
-  name: "SignUp",
+  name: "CreatePost",
   data: function () {
     return {
-      user: {
+      userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+      username: "",
+      post: {
         username: "",
-        password: "",
-        ocupation: "",
-        email: "",
-        profile_image: "",
+        image: "",
+        like: [],
+        description: "",
+        categoria: "",
+        comments: [],
+        
       },
     };
   },
-  methods: {
-    loadLogInPage: function () {
-      this.$router.push({ name: "logIn" });
+
+  /*apollo: {
+    userDetailById: {
+      query: gql`
+        query Query($userId: Int!) {
+          userDetailbyId(userId: $userId) {
+            username
+            email
+            profile_image
+            ocupation
+          }
+        }
+      `,
+      variables() {
+        return {
+          userId: this.userId,
+        };
+      },
     },
-    processSignUp: async function () {
-      console.log(this.user);
+  },*/
+
+  methods: {
+    /*processCreatePost: async function () {
       await this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation Mutation($userInput: SignUp) {
-              signUpUser(userInput: $userInput) {
-                refresh
-                access
+        .query({
+          query: gql`
+            query Query($userId: Int!) {
+              userDetailbyId(userId: $userId) {
+                username
+                email
+                profile_image
+                ocupation
               }
             }
           `,
           variables: {
-            userInput: this.user,
+            userId: this.userId,
           },
         })
         .then((result) => {
-          let dataSignUp = {
-            email: this.user.email,
-            token_access: result.data.signUpUser.access,
-            token_refresh: result.data.signUpUser.refresh,
-          };
-          this.$emit("completedSignUp", dataSignUp);
+          console.log(result);
+          console.log(this.post);
+          this.postAll.username = result.data.userDetailById.username;
+
+          this.postAll.like = [];
+          this.postAll.comments = [];
+          console.log(this.post);
+          this.createPost();
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR: Fallo en el registro.");
+          alert("ERROR: Fallo en el proceso.");
+        });
+    },*/
+    getUser: async function(){
+      await this.$apollo.query({
+        query: gql`
+        query Query($userId: Int!) {
+          userDetailbyId(userId: $userId) {
+            username
+          }
+        }`,
+        variables: {
+            userId: this.userId,
+          },
+      }).then((result) => {
+          console.log(result);
+          //alert("Post creado satisfactoriamente");
+         this.username= result.data.userDetailbyId.username;
+         console.log(this.username);
+         this.getPost()
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ERROR: Fallo en el recuperar usuario.");
         });
     },
+    getPost: async function () {
+      await this.$apollo
+        .query({
+          query: gql`
+            query Query($username: String!) {
+              postByUsername(username: $username) {
+                username
+                image
+                description
+                like {
+                  id
+                  usernameOrigin
+                  postIdDestiny
+                  likedate
+                }
+                categoria
+                comments {
+                  id
+                  usernameOrigin
+                  postIdDestiny
+                  commentdate
+                  message
+                }
+              }
+            }
+          `,
+          variables: {
+            username: this.username,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          //alert("Post creado satisfactoriamente");
+          //console.log(this.post);
+          this.post.username = this.username;
+          //this.post.like = [];
+          //this.post.comments = [];
+          console.log(this.post);
+          this.createPost();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ERROR: Fallo en el proceso de recuperar post.");
+        });
+    },
+    createPost: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation Mutation($post: PostInput!) {
+              createPost(post: $post) {
+                id
+                username
+                image
+                description
+                postdate
+                categoria
+              }
+            }
+          `,
+          variables: {
+            post: this.post,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          alert("Post creado satisfactoriamente");
+          this.$router.push({ name: "post" });
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ERROR: Fallo en el proceso.");
+        });
+    },
+    
   },
   created: function () {
-    this.$emit("is_inSignUp", true);
-  },
-};
+      //this.getPost();
+    },
+}
 </script>
 
 <style>
+/** {
+  margin: 0;
+  padding: 0;
+}
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 15px;
+
+  display: block;
+  page-break-after: 15 20px;
+}
+.modal1 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
+  z-index: 101;
+}
+fade-enter {
+}
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.2);
+}
 /*.container_all {
   margin: 0;
   padding: 0%;
@@ -131,9 +267,7 @@ export default {
 .modal h2 {
   color: #283747;
 }
-.modal form {
-  width: 70%;
-}
+
 .modal input {
   height: 40px;
   width: 100%;
@@ -162,9 +296,12 @@ export default {
   text-align: center;
   font-size: 18px;
 }
-
 .imagenlogo {
   width: 70%;
   height: 50%;
+}
+
+.modal form {
+  width: 70%;
 }*/
 </style>
