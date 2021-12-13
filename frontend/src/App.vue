@@ -51,26 +51,30 @@
                 >
               </li>
               <li v-if="is_auth">
-                <a v-on:click="loadChatsPage" class="enlace">
+                <a v-on:click="loadChatsPage()" class="enlace">
                   <i class="fas fa-comments"> Chats</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="loadUserProfilePage" class="enlace"
                   ><i class="fas fa-user"> Mi perfil</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="logOut" class="enlace">
                   <i class="fas fa-sign-out-alt"> Salir</i></a
                 >
               </li>
-              <li v-if="!inSignUp && !is_auth">
+              <!-- <li v-if="!inSignUp && !is_auth"> -->
+                <li>
                 <a v-on:click="loadSignUpPage" class="enlace"
                   ><i class="fas fa-user-plus"> Registrarse</i></a
                 >
               </li>
-              <li v-if="inSignUp && !is_auth">
+              <!-- <li v-if="inSignUp && !is_auth"> -->
+                <li>
                 <a v-on:click="loadLogInPage" class="enlace"
                   ><i class="fas fa-user-circle"> Iniciar sesión</i></a
                 >
@@ -125,6 +129,7 @@ export default {
   data: function () {
     return {
       inSignUp: false,
+      //userId = jwt_decode(localStorage.getItem("token_refresh")).user_id,
 
       //showwindow: false,
       //username: "",  
@@ -168,11 +173,16 @@ export default {
     },
 
     loadUserProfilePage: function () {
-      alert("load user profile page");
+      this.$router.push({ name:"userInfo"})
     },
     loadCreatePost: function () {
-      this.$router.push({ name: "agregarpost" });
+      this.$router.push({ name: "agregarpost"});
     },
+    
+    
+    /*loadCreatePost: function (id) {
+      this.$router.push({ name: "agregarpost", params: { id: id }  });
+    },*/
 
     loadChatsPage: function () {
       this.$router.push({ name: "chats" });
@@ -197,14 +207,14 @@ body {
   margin: 0 0 0 0;
 }
 .header {
-  background: #01a9dc; 
+  background: #68a3e7; 
   /*background: #eeebebe8;*/
   width: 100%;
   height: 9vh;
   /*box-shadow: 0px 0px 9px #a4a4a4;*/
   border-bottom-style: solid;
   /* border-bottom-color: #01a9dc; */
-  border-bottom-color: #440080;
+  border-bottom-color: #68a3e7;
   border-bottom-width: 2px;
 }
 

@@ -30,10 +30,10 @@ const postTypeDefs = gql `
   input PostInput{
       username: String!
       image: String
-      like: [LikeInput]!
+      like: [LikeInput]
       description: String!
       categoria: String!
-      comments: [CommentInput]!
+      comments: [CommentInput]
   }
 
   input PostUpdate{

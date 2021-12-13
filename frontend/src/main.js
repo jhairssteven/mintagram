@@ -7,6 +7,7 @@ import { setContext } from 'apollo-link-context'
 
 const httpLink = createHttpLink({
     uri: 'https://mintagram-apigateway.herokuapp.com/ ',
+    uri: 'https://mintagram-apigateway.herokuapp.com/',
 })
 const authLink = setContext((_, { headers }) => {
     return {

@@ -57,13 +57,18 @@
         <form v-on:submit.prevent="processFindPostCategory">
           <select v-model="category" name="select_category">
             <option disable selected>Seleccione una categoria</option>
-            <option
+            <option>Ayuda</option>
+            <option>Preguntas</option>
+            <option>Experiencias</option>
+            <option>Desarrollos</option>
+            <option>Proyectos</option>
+            <!--<option
               v-for="post in postAll"
               :key="post.id"
               :value="post.categoria"
             >
               {{ post.categoria }}
-            </option>
+            </option>-->
           </select>
           <button type="submit" class="btn btn-info boton">Filtrar</button>
         </form>

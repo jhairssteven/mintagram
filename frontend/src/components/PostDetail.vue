@@ -13,8 +13,8 @@
           <img v-bind:src="postById.image" class="img-post" />
         </div>
         <p>
-            <strong>categoria: </strong
-            ><span class="post-category">{{ postById.categoria}}</span>
+          <strong>categoria: </strong
+          ><span class="post-category">{{ postById.categoria }}</span>
         </p>
         <p class="parrafo-post">
           {{ postById.description }}
@@ -22,7 +22,7 @@
       </article>
     </section>
     <section id="right-column">
-      <article class="post" id="post1">
+      <article id="post1">
         <h2 class="titulo-post">Comentarios</h2>
         <div
           v-for="comment in postById.comments"
@@ -42,7 +42,9 @@
         </div>
         <section id="caja-comentarios">
           <button v-on:click="processCreateLike" class="like-btn">
-            <p>Me gusta <i class="fas fa-thumbs-up"></i></p>
+            <p class="like" style="color: white; margin-bottom: 2px">
+              Me gusta <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+            </p>
           </button>
           &nbsp;&nbsp;
           <form id="formulario" v-on:submit.prevent="processCreateComment">
@@ -69,86 +71,183 @@ import jwt_decode from "jwt-decode";
 export default {
   name: "PostDetail",
   data: function () {
-      return {
-          postId: this.$route.params.id,
-          /*userDetailById: {
+    return {
+      postId: this.$route.params.id,
+      /*userDetailById: {
             username: "",
             email: "",
             profile_image: "",
             ocupation: "",
           },*/
-          userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
-          comment: {
-            usernameOrigin: "",
-            postIdDestiny: "",
-            message: "",
-          },
-          like:{
-            usernameOrigin: "",
-            postIdDestiny: "",
-          }
-        };
-    },
+      userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+      comment: {
+        usernameOrigin: "",
+        postIdDestiny: "",
+        message: "",
+      },
+      like: {
+        usernameOrigin: "",
+        postIdDestiny: "",
+      },
+    };
+  },
 
   apollo: {
-      postById: {
-          query: gql`
-           query Query($postId: String!) {
-           postById(postId: $postId) {
-             id
-             username
-             image
-             description
-             like {
-               id
-               usernameOrigin
-               postIdDestiny
-               likedate
-             }
-             postdate
-             categoria
-             comments {
-               id
-               usernameOrigin
-               postIdDestiny
-               commentdate
-               message
-               }
+    postById: {
+      query: gql`
+        query Query($postId: String!) {
+          postById(postId: $postId) {
+            id
+            username
+            image
+            description
+            like {
+              id
+              usernameOrigin
+              postIdDestiny
+              likedate
+            }
+            postdate
+            categoria
+            comments {
+              id
+              usernameOrigin
+              postIdDestiny
+              commentdate
+              message
             }
           }
-          `,
-          variables() {
-              return {
-                  postId: this.postId,
-                };
-            },
-        },
+        }
+      `,
+      variables() {
+        return {
+          postId: this.postId,
+        };
+      },
     },
+  },
 
   methods: {
-      processCreateLike: async function(){
-        await this.$apollo.query({
-              query: gql`
-                query Query($userId: Int!) {
-                    userDetailbyId(userId: $userId) {
-                        username
-                        email
-                        profile_image
-                        ocupation
-                    } 
-                }`,
-                variables: {
-                    userId: this.userId,
-                },
-          }). then((result)=>{
-              console.log(result)
-              this.like.usernameOrigin= result.data.userDetailbyId.username;
-              this.like.postIdDestiny= this.postId;
+    processCreateLike: async function () {
+      await this.$apollo
+        .query({
+          query: gql`
+            query Query($userId: Int!) {
+              userDetailbyId(userId: $userId) {
+                username
+                email
+                profile_image
+                ocupation
+              }
+            }
+          `,
+          variables: {
+            userId: this.userId,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          this.like.usernameOrigin = result.data.userDetailbyId.username;
+          this.like.postIdDestiny = this.postId;
 
+          this.createLike();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("algo salio mal");
+        });
+    },
+    createLike: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation Mutation($like: LikeInput!) {
+              createLike(like: $like) {
+                id
+                usernameOrigin
+                postIdDestiny
+                likedate
+              }
+            }
+          `,
+          variables: {
+            like: this.like,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          alert("creacion like exitoso");
+          this.$apollo.queries.postById.refetch();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("algo paso");
+        });
+    },
+    processCreateComment: async function () {
+      await this.$apollo
+        .query({
+          query: gql`
+            query Query($userId: Int!) {
+              userDetailbyId(userId: $userId) {
+                username
+                email
+                profile_image
+                ocupation
+              }
+            }
+          `,
+          variables: {
+            userId: this.userId,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          this.comment.usernameOrigin = result.data.userDetailbyId.username;
+          this.comment.postIdDestiny = this.postId;
+          //formulario.reset();
+          this.createComment();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("algo salio mal");
+        });
+    },
+
+    createComment: async function () {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation Mutation($comment: CommentInput!) {
+              createComment(comment: $comment) {
+                id
+                usernameOrigin
+                postIdDestiny
+                commentdate
+                message
+              }
+            }
+          `,
+          variables: {
+            comment: this.comment,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          formulario.reset();
+          alert("creacion coemntario exitoso");
+          this.$apollo.queries.postById.refetch();
+          //this.LimpiarInput();
+          //this.$router.push({ name: "postDetail", params: { id: this.postId } });
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("algo paso");
+        });
               this.createLike()
-          }).catch((error)=>{
+          .catch((error)=>{
               console.log(error);
-              alert("algo salio mal");
+              alert("ERROR: Fallo en el proceso crear like1.");
         });
       },
       createLike: async function () {
@@ -167,12 +266,12 @@ export default {
                     },
             }).then((result)=>{
                 console.log(result)
-                alert("creacion like exitoso");
+                //alert("creacion like exitoso");
                 this.$apollo.queries.postById.refetch();
               
             }).catch((error) => {
                 console.log(error);
-                alert("algo paso");
+                alert("ERROR: Fallo en el proceso crear like2.");
                 });
         },
       processCreateComment: async function () {
@@ -199,7 +298,7 @@ export default {
                 this.createComment()
             }).catch((error)=>{
                 console.log(error);
-                alert("algo salio mal");
+                alert("ERROR: Fallo en el proceso crear comentario1.");
             });
         },
        
@@ -221,23 +320,23 @@ export default {
             }).then((result)=>{
                 console.log(result)
                 formulario.reset();
-                alert("creacion coemntario exitoso");
+                //alert("creacion coemntario exitoso");
                 this.$apollo.queries.postById.refetch();
                 
                 //this.LimpiarInput();
                 //this.$router.push({ name: "postDetail", params: { id: this.postId } });  
             }).catch((error) => {
                 console.log(error);
-                alert("algo paso");
+                alert("ERROR: Fallo en el proceso crear comentario2.");
                 });
         },
         
+
     },
-    created: function (){
-      
-      //this.LimpiarInput();
-      
-    }
+  
+  created: function () {
+    //this.LimpiarInput();
+  },
 };
 </script>
 
@@ -270,16 +369,16 @@ export default {
   margin: 10px auto;
 }
 
-#publicaciones {
+/*#publicaciones {
   width: 70%;
   height: auto;
   overflow: hidden;
   border: 0px solid red;
   margin-top: 10px;
   float: left;
-}
+}*/
 .post {
-  width: 96%;
+  width: 100%;
   height: auto;
   /* overflow: hidden; */
   padding: 7px;
@@ -309,6 +408,10 @@ export default {
 #publicaciones .img-post {
   width: 80%;
   height: 80%;
+/*#publicaciones .img-post {
+  width: auto;
+  height: auto;
+  
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -316,7 +419,7 @@ export default {
   padding: 5px;
   border: 2px solid #6e6e6e;
   border-radius: 5px;
-}
+}*/
 
 #publicaciones .parrafo-post {
   margin-right: 15px;
@@ -379,5 +482,63 @@ export default {
   margin-bottom: 4px;
   overflow-y: scroll;
   overflow-x: auto;
+}
+#imagen .img-post {
+  margin-left: auto;
+  margin-right: auto;
+}
+#left-column {
+  width: 60%;
+  height: auto;
+}
+#left-column .img-post {
+  width: 100%;
+  height: auto;
+  margin-left: auto;
+  text-align: center;
+  margin: 7px;
+  padding: 7px;
+  border-radius: 5px;
+}
+#right-column {
+  width: 35%;
+  margin-left: 20px;
+}
+.like-btn {
+  margin-top: 15px;
+  margin-left: 15px;
+  font-family: calibri;
+  font-size: 25px;
+  padding: 5px;
+  text-decoration: none;
+  background: #3d4f8c;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+.num-comentarios {
+  margin-top: 15px;
+  margin-left: 15px;
+  font-family: calibri;
+  font-size: 25px;
+  padding: 5px;
+  text-decoration: none;
+  background: #3d4f8c;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+#right-column .num-comentarios {
+  color: white;
+  margin-bottom: 2px;
+}
+.num-comentarios:hover{
+  text-decoration: underline;
+  color: white;
+  background: rgb(37, 37, 87);
+}
+.like-btn:hover{
+  text-decoration: underline;
+  color: white;
+  background: rgb(37, 37, 87);
 }
 </style>

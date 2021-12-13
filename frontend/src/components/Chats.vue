@@ -110,7 +110,7 @@
                 <tr
                   v-for="(contact, k) in contacts_list"
                   :key="k"
-                  v-on:click="openContactChat(contact.user_name)"
+                  v-on:click="openContactChat(contact.username)"
                 >
                   <td>
                     <!-- "rerquire(`@..." to use local imgs, for urls just use :src="URL" -->
@@ -123,7 +123,7 @@
                   </td>
 
                   <td>
-                    {{ contact.user_name }}<br />
+                    {{ contact.username }}<br />
                     <small>{{ contact.last_msg }}</small>
                   </td>
 
@@ -284,7 +284,19 @@ export default {
         profile_image: "",
         ocupation: "",
       },
-      
+      allChatsUserDetails: {
+        id_user: "",
+        profile_image: "",
+        username: "",
+        last_msg: "",
+        date_last_msg: "",
+        isSendByOriginUser: "",
+      },
+      lastSendMsgByMe: {
+        origin_user: "1",
+        destiny_user: "2",
+        text: "dadsf",
+      },
       user: {
         id_user: "1",
         username: "Daniela McCallister",
@@ -302,16 +314,20 @@ export default {
       },
       contacts_list: [
         {
+          id_user: "3",
           profile_image: "images/p2.jpg",
-          user_name: "Raul Castañeda",
+          username: "Raul Castañeda",
           last_msg: "Would you like to come?",
           date_last_msg: "11:04 PM",
+          isSendByOriginUser: 0,
         },
         {
-          profile_image: "images/p1.jpg",
-          user_name: "Brad Pitt",
-          last_msg: "see you later...",
-          date_last_msg: "2:04 AM",
+          id_user: "4",
+          profile_image: "images/p2.jpg",
+          username: "Brad Pitt",
+          last_msg: "It sounds cool",
+          date_last_msg: "1:04 AM",
+          isSendByOriginUser: 1,
         },
       ],
       chat: [
@@ -354,12 +370,31 @@ export default {
         };
       },
     },
+    allChatsUserDetails: {
+      query: gql`
+        query ($userOriginId: Int!) {
+          allChatsUserDetails(userOriginId: $userOriginId) {
+            id_user
+            profile_image
+            username
+            last_msg
+            date_last_msg
+            isSendByOriginUser
+          }
+        }
+      `,
+      variables() {
+        return {
+          userOriginId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+        };
+      },
+    },
   },
   methods: {
     openContactChat: function (userName) {
       alert(userName);
     },
-    sendMessage: function () {
+    sendMessage: async function () {
       let msg = document.getElementById("sendMsgInputForm").value;
       let hrs = new Date().getHours();
       let currentTime =
@@ -369,6 +404,7 @@ export default {
         (hrs > 12 ? " PM" : " AM");
 
       if (msg != "" && msg != null) {
+        // udpate UI with the new message
         this.chat.push({
           msg_txt: msg,
           date: currentTime,
@@ -380,6 +416,29 @@ export default {
 
         let elem = document.getElementById("chat-mgs-scroll");
         elem.scrollTop = elem.scrollHeight;
+
+        this.lastSendMsgByMe.origin_user = parseInt(this.user.id_user);
+        this.lastSendMsgByMe.destiny_user = parseInt(this.chatUser.id_user);
+        this.lastSendMsgByMe.text = msg;
+
+        await this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation Mutation($message: messageInput!) {
+                createMessage(message: $message)
+              }
+            `,
+            variables: {
+              message: this.lastSendMsgByMe,
+            },
+          })
+          .then((result) => {
+            console.log("succesfully send mgs" + msg);
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("No se pudo enviar el mensaje");
+          });
       } else {
         document.getElementById("sendMsgInputForm").focus();
       }
@@ -387,19 +446,22 @@ export default {
 
     getLoggedUserData: async function () {
       // await this.$emit("refresh_the_token");
-      await this.$apollo.queries.userDetailbyId.refetch();      
+      await this.$apollo.queries.userDetailbyId.refetch();
       this.user = this.userDetailbyId;
-
-      console.log("user:" + JSON.stringify(this.user))
-      console.log("userDetailbyId:" + JSON.stringify(this.userDetailbyId))
+      console.log("user:" + JSON.stringify(this.user));
+      console.log("userDetailbyId:" + JSON.stringify(this.userDetailbyId));
     },
-    getContactList: async function () {},
+    getContactList: async function () {
+      await this.$apollo.queries.allChatsUserDetails.refetch();
+      console.log()
+      this.contacts_list = this.allChatsUserDetails;
+    },
     getChatWithUser: async function (userId) {},
   },
 
   created: function () {
     this.getLoggedUserData();
-    // getContactList();
+    this.getContactList();
     // getChatWithUser(userId);
   },
 };
