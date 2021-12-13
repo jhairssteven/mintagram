@@ -237,8 +237,6 @@ export default {
           formulario.reset();
           alert("creacion coemntario exitoso");
           this.$apollo.queries.postById.refetch();
-
-<<<<<<< HEAD
           //this.LimpiarInput();
           //this.$router.push({ name: "postDetail", params: { id: this.postId } });
         })
@@ -246,9 +244,8 @@ export default {
           console.log(error);
           alert("algo paso");
         });
-=======
               this.createLike()
-          }).catch((error)=>{
+          .catch((error)=>{
               console.log(error);
               alert("ERROR: Fallo en el proceso crear like1.");
         });
@@ -334,9 +331,9 @@ export default {
                 });
         },
         
->>>>>>> ff8495e11ece999a0fab9fb232f4dc4d7ab951d9
+
     },
-  },
+  
   created: function () {
     //this.LimpiarInput();
   },
