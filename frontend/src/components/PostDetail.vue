@@ -149,7 +149,7 @@ export default {
               this.createLike()
           }).catch((error)=>{
               console.log(error);
-              alert("algo salio mal");
+              alert("ERROR: Fallo en el proceso crear like1.");
         });
       },
       createLike: async function () {
@@ -168,12 +168,12 @@ export default {
                     },
             }).then((result)=>{
                 console.log(result)
-                alert("creacion like exitoso");
+                //alert("creacion like exitoso");
                 this.$apollo.queries.postById.refetch();
               
             }).catch((error) => {
                 console.log(error);
-                alert("algo paso");
+                alert("ERROR: Fallo en el proceso crear like2.");
                 });
         },
       processCreateComment: async function () {
@@ -200,7 +200,7 @@ export default {
                 this.createComment()
             }).catch((error)=>{
                 console.log(error);
-                alert("algo salio mal");
+                alert("ERROR: Fallo en el proceso crear comentario1.");
             });
         },
        
@@ -222,14 +222,14 @@ export default {
             }).then((result)=>{
                 console.log(result)
                 formulario.reset();
-                alert("creacion coemntario exitoso");
+                //alert("creacion coemntario exitoso");
                 this.$apollo.queries.postById.refetch();
                 
                 //this.LimpiarInput();
                 //this.$router.push({ name: "postDetail", params: { id: this.postId } });  
             }).catch((error) => {
                 console.log(error);
-                alert("algo paso");
+                alert("ERROR: Fallo en el proceso crear comentario2.");
                 });
         },
         

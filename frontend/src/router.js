@@ -12,6 +12,8 @@ import PostDetail from './components/PostDetail.vue'
 import PostByUsername from './components/PostByUsername.vue'
 import PostByCategory from './components/PostByCategory.vue'
 import CreatePost from './components/CreatePost.vue'
+import PostEdit from './components/PostEdit.vue'
+
 
 const routes = [
   {
@@ -66,6 +68,12 @@ const routes = [
     path: '/agregarpost',
     name: 'agregarpost',
     component: CreatePost,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/postEdit',
+    name: 'postEdit',
+    component: PostEdit,
     meta: { requiresAuth: true }
   },
   {

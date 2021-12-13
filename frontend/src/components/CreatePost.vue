@@ -50,59 +50,9 @@ export default {
     };
   },
 
-  /*apollo: {
-    userDetailById: {
-      query: gql`
-        query Query($userId: Int!) {
-          userDetailbyId(userId: $userId) {
-            username
-            email
-            profile_image
-            ocupation
-          }
-        }
-      `,
-      variables() {
-        return {
-          userId: this.userId,
-        };
-      },
-    },
-  },*/
+  
 
   methods: {
-    /*processCreatePost: async function () {
-      await this.$apollo
-        .query({
-          query: gql`
-            query Query($userId: Int!) {
-              userDetailbyId(userId: $userId) {
-                username
-                email
-                profile_image
-                ocupation
-              }
-            }
-          `,
-          variables: {
-            userId: this.userId,
-          },
-        })
-        .then((result) => {
-          console.log(result);
-          console.log(this.post);
-          this.postAll.username = result.data.userDetailById.username;
-
-          this.postAll.like = [];
-          this.postAll.comments = [];
-          console.log(this.post);
-          this.createPost();
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ERROR: Fallo en el proceso.");
-        });
-    },*/
     getUser: async function(){
       await this.$apollo.query({
         query: gql`
@@ -123,7 +73,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR: Fallo en el recuperar usuario.");
+          alert("ERROR: Fallo en el proceso creacion post1.");
         });
     },
     getPost: async function () {
@@ -168,7 +118,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR: Fallo en el proceso de recuperar post.");
+          alert("ERROR: Fallo en el proceso creacion post2.");
         });
     },
     createPost: async function () {
@@ -197,7 +147,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert("ERROR: Fallo en el proceso.");
+          alert("ERROR: Fallo en el proceso creacion post3.");
         });
     },
     
