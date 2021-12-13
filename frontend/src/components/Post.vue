@@ -45,7 +45,7 @@
             type="text"
             name="buscar"
             v-model="username"
-            placeholder="Buscar posts por usuario..."
+            placeholder="Buscar posts..."
             required
           />
           <button class="boton" type="submit">Ok</button>

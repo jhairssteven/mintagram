@@ -16,7 +16,7 @@
               <input
                 id="searchUserInputField"
                 type="text"
-                placeholder="   Buscar usuarios..."
+                placeholder="Buscar usuarios..."
                 required
                 autocomplete="off"
                 style="font-size: 17px; padding: 15px auto"
