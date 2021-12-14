@@ -10,9 +10,9 @@
           ><span class="datos-publicaciones">{{ postById.postdate }}</span>
         </p>
         <div id="imagen">
-          <img v-bind:src="postById.image" class="img-post" />
+          <img v-bind:src="postById.image" class="img-post2" />
         </div>
-        <form v-on:submit.prevent="UpdatePost">
+        <form class="form_edit" v-on:submit.prevent="UpdatePost">
           <strong>Elige la categoria </strong>
           <select v-model="post.categoria" name="select_category">
             <option disable selected>Seleccione una categoria:</option>
@@ -122,6 +122,10 @@ export default {
 </script>
 
 <style>
+
+#menu{
+  width: 57%;
+}
 /*-----post-----*/
 .container_post {
   max-width: 1200px;
@@ -201,6 +205,7 @@ export default {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   color: #0489b1;
 }
+/*
 #publicaciones .like-btn {
   border-radius: 5px;
   background: #01a9dc;
@@ -254,8 +259,8 @@ export default {
   margin-bottom: 4px;
   overflow-y: scroll;
   overflow-x: auto;
-}
-#imagen .img-post {
+}*/
+#imagen .img-post2 {
   margin-left: auto;
   margin-right: auto;
 }
@@ -263,19 +268,54 @@ export default {
   width: 60%;
   height: auto;
 }
-#left-column .img-post {
+#left-column .img-post2 {
   width: 100%;
   height: auto;
   margin-left: auto;
   text-align: center;
-  margin: 7px;
   padding: 7px;
-  border-radius: 5px;
+  border-radius: 13px;
 }
 #right-column {
   width: 35%;
   margin-left: 20px;
 }
+.form_edit{
+    margin-top: 8px;
+    border: 1px solid #b9bdc1;
+    border-radius: 6px;
+    flex-direction: column;
+    padding: 15px;
+}
+.form_edit input{
+    overflow: visible;
+    margin: 5px;
+    margin-left: 41px;
+    width: 60%;
+    border-radius: 5px;
+    border: 1px solid;
+}
+.form_edit select{
+  word-wrap: normal;
+  width: 60%;
+  border-radius: 5px;
+  border: 1px solid;
+}
+.form_edit button{
+  text-transform: none;
+  margin-left: 132px;
+  width: 60%;
+  color: #e5e7e9;
+  background: #283747;
+  border: 1px solid #e5e7e9;
+  border-radius: 5px;
+}
+.form_edit button:hover{
+  color: #e5e7e9;
+  background: crimson;
+  border: 1px solid #283747;
+}
+/*
 .like-btn {
   margin-top: 15px;
   margin-left: 15px;
@@ -303,5 +343,5 @@ export default {
   margin-bottom: 2px;
 }
 #caja-comentarios .num-comentarios {
-}
+}*/
 </style>

@@ -3,7 +3,7 @@
     <section id="publicaciones">
       <!-- Articulos -->
 
-      <article class="post">
+      <article>
         <div v-for="post in sortedPost" :key="post.id" class="post">
           <a class="enlace-post">
             <h2 class="titulo-post">{{ post.username }}</h2>
@@ -145,6 +145,7 @@ export default {
 /* imagen del post*/
 #imagen {
   text-align: center;
+  width: 100%;
 }
 #publicaciones .img-post {
   width: auto;
@@ -270,7 +271,7 @@ form {
 }
 #buscar2 .boton:hover {
   text-decoration: underline;
-  background: #01a9dc;
+  background: #3d066d;
 }
 .encabezado-sidebar {
   width: 100%;
