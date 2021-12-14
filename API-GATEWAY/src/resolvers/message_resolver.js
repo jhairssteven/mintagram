@@ -33,8 +33,14 @@ const messageResolver = {
                     console.log("contact: " + JSON.stringify(contact))
                     if (contact != null) contacts_list.push(contact);
                 }
-
-                return [...new Set(contacts_list)];
+                
+                for (let i = 0; i < contacts_list.length; i++) {
+                    for (let j = i + 1; j < contacts_list.length; j++) {
+                        if (contacts_list[i].id_user == contacts_list[j].id_user)
+                            contacts_list.splice(j, 1)
+                    }
+                }
+                return contacts_list;
 
             } else {
                 return null

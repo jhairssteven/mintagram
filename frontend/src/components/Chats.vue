@@ -110,7 +110,7 @@
                 <tr
                   v-for="(contact, k) in contacts_list"
                   :key="k"
-                  v-on:click="openContactChat(contact.username)"
+                  v-on:click="openContactChat(contact.id_user)"
                 >
                   <td>
                     <!-- "rerquire(`@..." to use local imgs, for urls just use :src="URL" -->
@@ -139,7 +139,7 @@
           <div class="message-table-scroll" id="chat-mgs-scroll">
             <table class="table">
               <tbody>
-                <tr v-for="(message, k) in chat" :key="k">
+                <tr v-for="(message, k) in currentChat" :key="k">
                   <!-- user's messages -->
                   <template v-if="message.sender_id == user.id_user">
                     <tr>
@@ -277,13 +277,30 @@ export default {
 
   data: function () {
     return {
-      userDetailbyId: {
-        id_user: "",
+      interval: '',
+      chatToOpen_userId: 1,
+      currentChat_userDetailbyId: {
+        id_user: "18",
         username: "",
         email: "",
         profile_image: "",
         ocupation: "",
       },
+      userDetailbyId: {
+        id_user: "1",
+        username: "",
+        email: "",
+        profile_image: "",
+        ocupation: "",
+      },
+      chatBetween: {
+        id: "1",
+        origin_user: "",
+        destiny_user: "",
+        text: "",
+        register_date: "",
+      },
+
       allChatsUserDetails: {
         id_user: "",
         profile_image: "",
@@ -298,56 +315,40 @@ export default {
         text: "dadsf",
       },
       user: {
-        id_user: "1",
+        id_user: "18",
         username: "Daniela McCallister",
         email: "raul@mintagram.com",
-        profile_image: "images/p3.jpg",
+        profile_image: "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg",
         ocupation: "Desarrolladora",
       },
       chatUser: {
         //destination user's info for current opened chat
-        id_user: "2",
-        username: "Raul Castañeda",
-        email: "raul@mintagram.com",
-        profile_image: "images/p2.jpg",
-        ocupation: "Ingeniero de Software",
+        // id_user: "18",
+        // username: "Sin chats",
+        // email: "raul@mintagram.com",
+        // profile_image: "https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg",
+        // ocupation: "Ingeniero de Software",
       },
       contacts_list: [
-        {
-          id_user: "3",
-          profile_image: "images/p2.jpg",
-          username: "Raul Castañeda",
-          last_msg: "Would you like to come?",
-          date_last_msg: "11:04 PM",
-          isSendByOriginUser: 0,
-        },
-        {
-          id_user: "4",
-          profile_image: "images/p2.jpg",
-          username: "Brad Pitt",
-          last_msg: "It sounds cool",
-          date_last_msg: "1:04 AM",
-          isSendByOriginUser: 1,
-        },
+        // {
+        //   id_user: "3",
+        //   profile_image: "images/p2.jpg",
+        //   username: "Raul Castañeda",
+        //   last_msg: "Would you like to come?",
+        //   date_last_msg: "11:04 PM",
+        //   isSendByOriginUser: 0,
+        // },
+        // {
+        //   id_user: "4",
+        //   profile_image: "images/p2.jpg",
+        //   username: "Brad Pitt",
+        //   last_msg: "It sounds cool",
+        //   date_last_msg: "1:04 AM",
+        //   isSendByOriginUser: 1,
+        // },
       ],
-      chat: [
-        {
-          msg_txt: "Hi, how are you?",
-          date: "11.24 PM",
-          sender_id: "1",
-        },
-        {
-          msg_txt: "Hi! It's been a time...",
-          date: "11.26 PM",
-          sender_id: "2",
-        },
-        {
-          msg_txt:
-            "Haan Lockdown ki wajah se company me kuch problem ho rahi thi so kuch logo ko resign dene ko kaha gaya tha.. meri condition thodi thik hai to maine socha koi aur majbur ho kar nikle usse acha main hi nikl jata hu kisi jarurt wale ki job bach jayegi",
-          date: "11.26 PM",
-          sender_id: "1",
-        },
-      ],
+      currentChat: [],
+      user_id_to_get_data: 18,
     };
   },
 
@@ -366,7 +367,25 @@ export default {
       `,
       variables() {
         return {
-          userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+          userId: this.user_id_to_get_data,
+        };
+      },
+    },
+    currentChat_userDetailbyId: {
+      query: gql`
+        query ($userId: Int!) {
+          currentChat_userDetailbyId: userDetailbyId(userId: $userId) {
+            id_user
+            username
+            email
+            profile_image
+            ocupation
+          }
+        }
+      `,
+      variables() {
+        return {
+          userId: this.user_id_to_get_data,
         };
       },
     },
@@ -385,14 +404,48 @@ export default {
       `,
       variables() {
         return {
-          userOriginId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+          userOriginId: jwt_decode(localStorage.getItem("token_refresh"))
+            .user_id,
+        };
+      },
+    },
+    chatBetween: {
+      query: gql`
+        query ($userOriginId: Int!, $userDestinyId: Int!) {
+          chatBetween(
+            userOriginId: $userOriginId
+            userDestinyId: $userDestinyId
+          ) {
+            id
+            origin_user
+            destiny_user
+            text
+            register_date
+          }
+        }
+      `,
+      variables() {
+        return {
+          userOriginId: jwt_decode(localStorage.getItem("token_refresh"))
+            .user_id,
+          userDestinyId: this.chatToOpen_userId,
         };
       },
     },
   },
   methods: {
-    openContactChat: function (userName) {
-      alert(userName);
+
+    openContactChat: async function (userId) {
+      console.log("chat user id to open::" + userId)
+      // this.chatUser.id_user = userId;
+      // let currentShowingChat_userId = this.contacts_list[0].id_user;
+      let currentShowingChat_userId = userId;
+      this.user_id_to_get_data = parseInt(userId);
+      await this.getChatWithUser(currentShowingChat_userId);
+      
+      await this.$apollo.queries.currentChat_userDetailbyId.refetch();
+      this.chatUser = this.currentChat_userDetailbyId;
+      console.log("chatUser:: " + JSON.stringify(this.chatUser));
     },
     sendMessage: async function () {
       let msg = document.getElementById("sendMsgInputForm").value;
@@ -405,17 +458,15 @@ export default {
 
       if (msg != "" && msg != null) {
         // udpate UI with the new message
-        this.chat.push({
-          msg_txt: msg,
+        let txtt =  "Tú: " + msg;
+        this.currentChat.push({
+          msg_txt: txtt,
           date: currentTime,
           sender_id: this.user.id_user,
         });
 
-        // adjust scroll all down and reset input form text
-        document.getElementById("sendMsgInputForm").value = "";
-
-        let elem = document.getElementById("chat-mgs-scroll");
-        elem.scrollTop = elem.scrollHeight;
+        this.scrollAllDownChatZone();
+        
 
         this.lastSendMsgByMe.origin_user = parseInt(this.user.id_user);
         this.lastSendMsgByMe.destiny_user = parseInt(this.chatUser.id_user);
@@ -433,7 +484,7 @@ export default {
             },
           })
           .then((result) => {
-            console.log("succesfully send mgs" + msg);
+            console.log("succesfully send mgs: " + msg);
           })
           .catch((error) => {
             console.log(error);
@@ -443,26 +494,55 @@ export default {
         document.getElementById("sendMsgInputForm").focus();
       }
     },
+    scrollAllDownChatZone: function () {
+        // adjust scroll all down and reset input form text
+        document.getElementById("sendMsgInputForm").value = "";
+
+        let elem = document.getElementById("chat-mgs-scroll");
+        elem.scrollTop = elem.scrollHeight;
+    },
 
     getLoggedUserData: async function () {
-      // await this.$emit("refresh_the_token");
+      this.user_id_to_get_data = await jwt_decode(
+        localStorage.getItem("token_refresh")
+      ).user_id;
       await this.$apollo.queries.userDetailbyId.refetch();
       this.user = this.userDetailbyId;
+
       console.log("user:" + JSON.stringify(this.user));
       console.log("userDetailbyId:" + JSON.stringify(this.userDetailbyId));
     },
     getContactList: async function () {
       await this.$apollo.queries.allChatsUserDetails.refetch();
-      console.log()
       this.contacts_list = this.allChatsUserDetails;
+      console.log("contacts list: " + this.contacts_list);
     },
-    getChatWithUser: async function (userId) {},
+    getChatWithUser: async function (userId) {
+      this.chatToOpen_userId = userId;
+      await this.$apollo.queries.chatBetween.refetch();
+      this.currentChat = this.format_ChatBetweenResponse(this.chatBetween);
+      this.scrollAllDownChatZone();
+      // console.log("chatBetween: " + JSON.stringify(this.chatBetween));
+    },
+    format_ChatBetweenResponse: function (chatBetween) {
+      let formated_chat = [];
+      for (const msg of chatBetween) {
+        let txtt = ((msg.origin_user == this.user.id_user)*1) ? "Tú: " + msg.text : msg.text;
+        formated_chat.push({
+          msg_txt: txtt,
+          date: msg.register_date,
+          sender_id: msg.origin_user,
+        });
+      }
+      return formated_chat;
+    },
   },
 
-  created: function () {
-    this.getLoggedUserData();
-    this.getContactList();
-    // getChatWithUser(userId);
+  created: async function () {
+    await this.getLoggedUserData();
+    await this.getContactList();
+    await this.openContactChat(this.contacts_list[0].id_user);
+    this.interval = setInterval( () => this.getChatWithUser(this.chatUser.id_user), 5000 );
   },
 };
 </script>

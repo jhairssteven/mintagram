@@ -1,10 +1,7 @@
 const userResolver = {
     Query: {
-        userDetailbyId: (_,{userId}, {dataSources,userIdToken}) => {
-            if( userId == userIdToken)
-                return dataSources.user_profile_API.getUser( userId);
-            else
-                return null;
+        userDetailbyId: (_,{userId}, {dataSources}) => {
+            return dataSources.user_profile_API.getUser( userId);
 
         },
         /*emailExists: async(_,{email}, {dataSources}) =>{

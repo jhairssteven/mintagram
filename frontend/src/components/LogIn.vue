@@ -68,11 +68,13 @@ export default {
     },
     loadSignUpPage: function () {
       this.$router.push({ name: "signUp" });
+      this.$emit("is_inSignUp", true);
+      this.$emit("is_inLogIn", false);
     },
   },
 
   created: function () {
-    this.$emit("is_inSignUp", false);
+    // this.$emit("is_inSignUp", false);
     //this.$emit("is_inLogin", true);
   },
 };

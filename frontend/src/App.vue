@@ -40,17 +40,19 @@
           </div>
           <div id="menu">
             <ul>
-              <li>
+              <!-- <li>
                 <a v-on:click="loadMainPage" class="enlace">
                   <i class="fas fa-home"> Inicio</i></a
                 >
-              </li>
-              <li @click="showwindow = true" v-if="is_auth">
+              </li> -->
+              <!-- <li @click="showwindow = true" v-if="is_auth"> -->
+                <li>
                 <a v-on:click="loadCreatePost" class="enlace">
                   <i class="fas fa-plus-square">Post</i></a
                 >
               </li>
-              <li v-if="is_auth">
+              <!-- <li v-if="is_auth"> -->
+                <li>
                 <a v-on:click="loadChatsPage()" class="enlace">
                   <i class="fas fa-comments"> Chats</i></a
                 >
@@ -67,14 +69,12 @@
                   <i class="fas fa-sign-out-alt"> Salir</i></a
                 >
               </li>
-              <!-- <li v-if="!inSignUp && !is_auth"> -->
-                <li>
+                <li v-if ="!inSignUp && inLogIn">
                 <a v-on:click="loadSignUpPage" class="enlace"
                   ><i class="fas fa-user-plus"> Registrarse</i></a
                 >
               </li>
-              <!-- <li v-if="inSignUp && !is_auth"> -->
-                <li>
+                <li v-if ="inSignUp && !inLogIn">
                 <a v-on:click="loadLogInPage" class="enlace"
                   ><i class="fas fa-user-circle"> Iniciar sesión</i></a
                 >
@@ -90,6 +90,7 @@
         v-on:completedLogIn="completedLogIn"
         v-on:completedSignUp="completedSignUp"
         v-on:is_inSignUp="is_inSignUp"
+        v-on:is_inLogIn="is_inLogIn"
       >
       </router-view>
     </div>
@@ -129,6 +130,7 @@ export default {
   data: function () {
     return {
       inSignUp: false,
+      inLogIn: false,
       //userId = jwt_decode(localStorage.getItem("token_refresh")).user_id,
 
       //showwindow: false,
@@ -138,6 +140,9 @@ export default {
   
 
   methods: {
+    isThereToken: function () {
+      return localStorage.getItem("token_refresh") || false;
+    },
     completedLogIn: function (dataLogIn) {
       //localStorage.setItem("username", dataLogIn.username);
       localStorage.setItem("token_access", dataLogIn.token_access);
@@ -153,6 +158,10 @@ export default {
       this.inSignUp = data;
     },
 
+    is_inLogIn: function (data) {
+      this.inLogIn = data;
+    },
+
     logOut: function () {
       localStorage.clear();
       this.loadLogInPage();
@@ -166,10 +175,13 @@ export default {
     loadLogInPage: function () {
       this.$router.push({ name: "logIn" });
       this.inSignUp = false;
+      this.inLogIn = true;
     },
 
     loadSignUpPage: function () {
       this.$router.push({ name: "signUp" });
+      this.inSignUp = true;
+      this.inLogIn = false;
     },
 
     loadUserProfilePage: function () {

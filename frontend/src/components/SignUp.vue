@@ -50,6 +50,8 @@ export default {
   methods: {
     loadLogInPage: function () {
       this.$router.push({ name: "logIn" });
+      this.$emit("is_inSignUp", false);
+      this.$emit("is_inLogIn", true);
     },
     processSignUp: async function () {
       console.log(this.user)
@@ -81,7 +83,7 @@ export default {
     },
   },
   created: function () {
-    this.$emit("is_inSignUp", true);
+    // this.$emit("is_inSignUp", true);
     //this.$emit("is_inLogin", false);
   },
 };
