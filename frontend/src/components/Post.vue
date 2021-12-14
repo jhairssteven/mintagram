@@ -328,7 +328,7 @@ export default {
 
 #sidebar {
   float: right;
-  width: 28%;
+  width: 31%;
   border: 0px solid;
   height: auto;
   overflow: hidden;
@@ -363,17 +363,31 @@ form {
   margin-bottom: 4px;
 }
 
-#buscar2 .boton {
-  border: 0px;
-  color: white;
-  background: #0b4c5f;
-  padding: 10px;
+select{
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 5px #ccc inset;
+  padding: 5px 2px;
   border-radius: 10px;
-  cursor: pointer;
+  font-size: 18px;
+  color: black;
+  width: 79%;
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+#buscar2 .boton {
+    border: 0px;
+    color: white;
+    background: #68a3e7;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 3px;
+    height: 41px;
 }
 #buscar2 .boton:hover {
   text-decoration: underline;
-  background: #01a9dc;
+  background: #3d066d;
 }
 .encabezado-sidebar {
   width: 100%;
@@ -383,6 +397,22 @@ form {
   color: white;
   font-size: 19px;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+#categorias .btn-info {
+    border: 0px;
+    color: white;
+    background: #68a3e7;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 3px;
+    height: 41px;
+    width: 17%;
+    margin-bottom: 8px;
+}
+#categorias .btn-info:hover{
+  text-decoration: underline;
+  background: #3d066d;
 }
 
 .enlace-sidebar {

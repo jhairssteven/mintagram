@@ -408,6 +408,7 @@ export default {
 #publicaciones .img-post {
   width: 80%;
   height: 80%;
+}
 /*#publicaciones .img-post {
   width: auto;
   height: auto;

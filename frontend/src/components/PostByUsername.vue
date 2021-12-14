@@ -271,7 +271,7 @@ form {
 }
 #buscar2 .boton:hover {
   text-decoration: underline;
-  background: #01a9dc;
+  background: #3d066d;
 }
 .encabezado-sidebar {
   width: 100%;

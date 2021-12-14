@@ -354,7 +354,6 @@ export default {
   width: 500px;
   height: 250px;
   cursor: pointer;
-  border: 2px solid pink;
 }
 .post {
   width: 96%;
