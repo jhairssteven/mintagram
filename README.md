@@ -1,5 +1,5 @@
 # mintagram
-Red social para la comunidad de MisionTic 2022 donde pueden compartir sus logros y dificultades
+Social network for the MisionTic2022 community. A place to share personal projects and difficulties.
 
 ### PROJECT DOCUMENTATION
 [Here](https://drive.google.com/drive/folders/1D32sR4GKU7EXtFBazEViiliFMsrT_k6z?usp=sharing) you can look at documentation such as; problem definition, basic UI/UX and proyect architecture.
