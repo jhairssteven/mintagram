@@ -11,4 +11,3 @@ Social network for the MisionTic2022 community. A place to share personal projec
 
 - [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/red-meadow-94677/workspace/post-microservice/collection/18428848-5a3be881-96d2-479e-a0c6-46287e2c06e0) | Posts
 
-Check it out at [minttagram](https://minttagram.herokuapp.com).
